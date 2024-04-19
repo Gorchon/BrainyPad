@@ -16,7 +16,8 @@ QuizNote is built using the following technologies:
 - **Frontend**:
 - **Backend**: 
 - **AI & NLP**: Utilizes TensorFlow?? and OpenAI models to analyze text and generate relevant quiz questions.
-- **Database**: 
+- **Database**:
+- **Platform(s)**: ?
 - **Deployment**: Vercel? 
 
 ## Installation
