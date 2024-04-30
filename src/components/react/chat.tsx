@@ -29,9 +29,8 @@ const Chat: React.FC = () => {
   };
 
   return (
-    // <div className="flex flex-col h-screen bg-gray-100 rounded-lg shadow relative" >
     <div
-      className="flex flex-col h-screen bg-[#e3e8ed] rounded-lg shadow relative"
+      className="flex flex-col h-screen bg-[#e3e8ed] rounded-lg shadow relative w-2/5"
       style={{ height: "85vh" }}
     >
       <div
@@ -58,13 +57,13 @@ const Chat: React.FC = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          placeholder="Escribe tu mensaje"
+          placeholder="Write your message"
         />
         <button
           className="bg-gray-600 hover:bg-blue-700 text-white px-7 py-2 rounded-r-lg focus:outline-none border-2 border-gray-300"
           onClick={handleSend}
         >
-          Enviar
+          Send
         </button>
       </div>
     </div>
