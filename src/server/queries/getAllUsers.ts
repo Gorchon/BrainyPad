@@ -13,4 +13,3 @@ const client = postgres(connectionString, { prepare: false })
 const db = drizzle(client);
 
 export const allUsers = await db.select().from(users);
-
