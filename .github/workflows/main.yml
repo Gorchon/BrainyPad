@@ -11,7 +11,7 @@ jobs:
       - name: Deploy to Vercel Action
         uses: BetaHuhn/deploy-to-vercel-action@v1
         with:
-          GITHUB_TOKEN: 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
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERCEL_TOKEN: waYwhqpPAAq6beUSL91vZbEj
           VERCEL_ORG_ID: FxCGMDj10v3PkYbVZnlhEvZy
           VERCEL_PROJECT_ID: prj_EXDXIQfJINBojIiAG1fMz9PZwLAx
