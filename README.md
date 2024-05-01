@@ -5,7 +5,7 @@
 Welcome to BrainyPad, where your notes come to life! This innovative app leverages cutting-edge artificial intelligence to transform your study notes into interactive quizzes, helping reinforce your learning and ensuring you grasp the most important concepts. Whether you're a student, a lifelong learner, or a professional brushing up on new material, QuizNote is designed to enhance your learning experience by making study time both efficient and effective.
 
 ## Features
-- **Note-Taking**: Easily input or upload your study notes.
+- **Note-Taking**: Easily input or upload you're study notes.
 - **AI Analysis**: Our AI analyzes your notes, identifying key information and themes.
 - **Quiz Generation**: Automatically generates quizzes based on your notes to test your understanding of the material.
 - **Progress Tracking**: Keeps track of your learning progress and highlights areas needing improvement.
