@@ -23,7 +23,7 @@ const InnerFilePreview: React.FC<FilePreviewProps> = ({ id }) => {
   if (isLoading || !data) return <div>Loading...</div>;
 
   return (
-    <div>
+    <div className="w-[40vw]">
       <iframe src={data.media} className="w-full min-h-[80vh]" />
     </div>
   );

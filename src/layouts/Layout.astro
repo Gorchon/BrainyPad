@@ -6,8 +6,10 @@ import ReactSidebar from "../components/react/Sidebar";
   .container {
     display: flex; /* Ensures the sidebar and content are side-by-side */
     min-height: 100vh; /* Full viewport height */
+    min-width: 100vw; /* Full viewport width */
   }
   .content {
+    width: 100%; /* Takes up the remaining space */
     flex-grow: 1; /* Takes up the remaining space */
     padding: 20px; /* Padding around the content */
     background-color: #fff; /* White background for the content area */
