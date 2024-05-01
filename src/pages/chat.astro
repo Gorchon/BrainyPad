@@ -17,12 +17,11 @@ import Chatt from "../components/react/chat";
     </div>
     <div class="flex justify-between">
       <!-- Ajustado para separar los contenidos -->
-      <div class="flex-grow">
+      <div class="flex flex-grow justify-evenly">
         <Chatt client:load />
-      </div>
-      <div
-        class="fixed right-0 top-5 bg-[#e3e8ed] p-4 rounded-lg shadow-lg mr-5"
-        style={{ height: "95vh", width: "50vh" }}
+        <div
+        class="bg-[#e3e8ed] p-4 rounded-lg shadow-lg mr-5"
+        style={{ height: "65h", width: "70vh" }}
       >
         <!-- Contenedor para las fuentes referenciadas, posicionado fijo -->
         <h2 class="font-bold text-lg mb-3">Sources Referenced</h2>
@@ -31,6 +30,8 @@ import Chatt from "../components/react/chat";
           <li>2. Familiares</li>
         </ul>
       </div>
+      </div>
+      
     </div>
   </div>
 </Layout>

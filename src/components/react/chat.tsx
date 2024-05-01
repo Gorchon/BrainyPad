@@ -30,7 +30,7 @@ const Chat: React.FC = () => {
 
   return (
     <div
-      className="flex flex-col h-screen bg-[#e3e8ed] rounded-lg shadow relative w-2/5"
+      className="flex flex-col h-screen bg-[#e3e8ed] rounded-lg shadow relative w-1/2"
       style={{ height: "85vh" }}
     >
       <div
