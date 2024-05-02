@@ -17,7 +17,7 @@ Welcome to BrainyPad, where your notes come to life! This innovative app leverag
 QuizNote is built using the following technologies:
 
 - **Frontend**: React, Solid, Vue, Svelte
-- **Backend**: Astro
+- **Backend**: Astro API Routes
 - **AI & NLP**: OpenAI for the LLM, Nearbyy for the RAG
 - **Database**: PostgreSQL (Supabase)
 - **Platform(s)**: Web
