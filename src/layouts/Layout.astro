@@ -1,6 +1,7 @@
 ---
 // Import the Sidebar component
 import Sidebar from "../components/astro/sidebar.astro";
+import ReactSidebar from "../components/react/Sidebar";
 ---
 
 <style>
@@ -17,7 +18,8 @@ import Sidebar from "../components/astro/sidebar.astro";
 </style>
 
 <div class="container">
-  <Sidebar />
+  <ReactSidebar client:load />
+  <!-- <Sidebar client:load /> -->
   <main class="content">
     <slot />
     <!-- This slot will be replaced by specific page content -->
