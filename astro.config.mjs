@@ -3,8 +3,9 @@ import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import solidJs from "@astrojs/solid-js";
 import svelte from "@astrojs/svelte";
-
 import vue from "@astrojs/vue";
+
+import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,5 +13,7 @@ export default defineConfig({
     include: ["**/react/*"]
   }), solidJs({
     include: ["**/solid/*"]
-  }), svelte(), vue()]
+  }), svelte(), vue()],
+  output: "server",
+  adapter: vercel()
 });
