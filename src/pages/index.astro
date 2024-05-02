@@ -1,0 +1,17 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+import { Hello as ReactHello } from "../components/react/hello";
+import { Hello as SolidHello } from "../components/solid/hello";
+import SvelteHello from "../components/svelte/hello.svelte";
+import VueHello from "../components/vue/hello.vue";
+import AstroHello from "../components/astro/hello.astro";
+---
+
+<Layout title="Welcome to Astro.">
+  <ReactHello client:load />
+  <SolidHello client:load />
+  <SvelteHello client:load />
+  <VueHello client:load />
+  <AstroHello client:load />
+</Layout>

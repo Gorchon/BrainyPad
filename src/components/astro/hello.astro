@@ -1,0 +1,13 @@
+<script>
+  let count = 0;
+  let span = document.getElementById("count")!;
+
+  setInterval(() => {
+    count++;
+    span.textContent = count.toString();
+  }, 1000);
+</script>
+
+<div class="bg-purple-300">
+  <p>Hello from astro: <span id="count">0</span></p>
+</div>
