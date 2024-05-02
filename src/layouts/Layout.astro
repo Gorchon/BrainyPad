@@ -1,22 +1,25 @@
 ---
-interface Props {
-  title: string;
-}
-
-const { title } = Astro.props;
+// Import the Sidebar component
+import Sidebar from "../components/astro/sidebar.astro";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-  </head>
-  <body>
+<style>
+  .container {
+    display: flex; /* Ensures the sidebar and content are side-by-side */
+    min-height: 100vh; /* Full viewport height */
+  }
+  .content {
+    flex-grow: 1; /* Takes up the remaining space */
+    padding: 20px; /* Padding around the content */
+    background-color: #fff; /* White background for the content area */
+    overflow-y: auto; /* Adds scroll to content if needed */
+  }
+</style>
+
+<div class="container">
+  <Sidebar />
+  <main class="content">
     <slot />
-  </body>
-</html>
+    <!-- This slot will be replaced by specific page content -->
+  </main>
+</div>
