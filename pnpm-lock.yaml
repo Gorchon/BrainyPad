@@ -11,7 +11,10 @@ importers:
       '@astrojs/check':
         specifier: ^0.5.10
         version: 0.5.10(typescript@5.4.5)
-      '@astrojs/react':
+      '@astrojs/node':
+    specifier: ^8.2.5
+    version: 8.2.5(astro@4.7.0)
+  '@astrojs/react':
         specifier: ^3.3.1
         version: 3.3.1(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(vite@5.2.10)
       '@astrojs/solid-js':
@@ -38,7 +41,10 @@ importers:
       astro:
         specifier: ^4.7.0
         version: 4.7.0(typescript@5.4.5)
-      react:
+      astro-clerk-auth:
+    specifier: ^0.5.0
+    version: 0.5.0(@types/react@18.3.1)(astro@4.7.0)(react-dom@18.3.1)(react@18.3.1)
+  react:
         specifier: ^18.3.1
         version: 18.3.1
       react-dom:
