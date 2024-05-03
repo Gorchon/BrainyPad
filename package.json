@@ -6,6 +6,9 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
+    "db:generate": "drizzle-kit generate:pg --schema ./src/server/db/schema.ts --out=./src/server/db/migrations",
+    "db:migrate": "bun run ./src/server/db/migrate.ts",
+    "db:seed": "pnpm run ./src/db/seed.ts",
     "preview": "astro preview",
     "astro": "astro"
   },

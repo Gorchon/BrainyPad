@@ -3635,8 +3635,8 @@ packages:
     peerDependencies:
       zod: ^3.23.3
 
-  zod@3.23.5:
-    resolution: {integrity: sha512-fkwiq0VIQTksNNA131rDOsVJcns0pfVUjHzLrNBiF/O/Xxb5lQyEXkhZWcJ7npWsYlvs+h0jFWXXy4X46Em1JA==}
+  zod@3.23.6:
+    resolution: {integrity: sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -4386,10 +4386,10 @@ snapshots:
 
   '@hono/node-server@1.11.1': {}
 
-  '@hono/zod-validator@0.2.1(hono@4.2.9)(zod@3.23.5)':
+  '@hono/zod-validator@0.2.1(hono@4.2.9)(zod@3.23.6)':
     dependencies:
       hono: 4.2.9
-      zod: 3.23.5
+      zod: 3.23.6
 
   '@img/sharp-darwin-arm64@0.33.3':
     optionalDependencies:
@@ -5012,8 +5012,8 @@ snapshots:
       vitefu: 0.2.5(vite@5.2.11(@types/node@20.12.8))
       which-pm: 2.1.1
       yargs-parser: 21.1.1
-      zod: 3.23.5
-      zod-to-json-schema: 3.23.0(zod@3.23.5)
+      zod: 3.23.6
+      zod-to-json-schema: 3.23.0(zod@3.23.6)
     optionalDependencies:
       sharp: 0.33.3
     transitivePeerDependencies:
@@ -5345,7 +5345,7 @@ snapshots:
     dependencies:
       '@esbuild-kit/esm-loader': 2.6.5
       '@hono/node-server': 1.11.1
-      '@hono/zod-validator': 0.2.1(hono@4.2.9)(zod@3.23.5)
+      '@hono/zod-validator': 0.2.1(hono@4.2.9)(zod@3.23.6)
       camelcase: 7.0.1
       chalk: 5.3.0
       commander: 9.5.0
@@ -5359,7 +5359,7 @@ snapshots:
       minimatch: 7.4.6
       semver: 7.6.0
       superjson: 2.2.1
-      zod: 3.23.5
+      zod: 3.23.6
     transitivePeerDependencies:
       - supports-color
 
@@ -7530,10 +7530,10 @@ snapshots:
 
   yocto-queue@1.0.0: {}
 
-  zod-to-json-schema@3.23.0(zod@3.23.5):
+  zod-to-json-schema@3.23.0(zod@3.23.6):
     dependencies:
-      zod: 3.23.5
+      zod: 3.23.6
 
-  zod@3.23.5: {}
+  zod@3.23.6: {}
 
   zwitch@2.0.4: {}
