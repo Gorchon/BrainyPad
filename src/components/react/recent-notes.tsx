@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
-import type { FileSelect } from "../../server/db/types";
+import type { FileSelect, NoteSelect } from "../../server/db/types";
 import type { NewNoteBody } from "../../pages/api/notes/new";
 
 interface RecentNotesProps {
@@ -11,8 +11,10 @@ interface RecentNotesProps {
 const RecentNotes: React.FC<RecentNotesProps> = () => {
   return (
     <ReactQueryProvider>
-      <InnerRecentNotes />
-      <CreateNoteButton />
+      <div className="grid grid-cols-4 gap-8">
+        <InnerRecentNotes />
+        <CreateNoteButton />
+      </div>
     </ReactQueryProvider>
   );
 };
@@ -20,13 +22,20 @@ const RecentNotes: React.FC<RecentNotesProps> = () => {
 const InnerRecentNotes = () => {
   const { data, isLoading } = useQuery({
     queryFn: () =>
-      fetch("/api/notes").then((res) => res.json() as Promise<FileSelect[]>),
+      fetch("/api/notes").then((res) => res.json() as Promise<NoteSelect[]>),
     queryKey: "notes",
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || !data) return <div>Loading...</div>;
 
-  return <div>{JSON.stringify(data)}</div>;
+  return data.map((note) => (
+    <NotePreview
+      key={note.id}
+      content={note.content ?? ""}
+      id={note.id}
+      title={note.title ?? ""}
+    />
+  ));
 };
 
 const CreateNoteButton = () => {
@@ -45,9 +54,37 @@ const CreateNoteButton = () => {
   });
 
   return (
-    <button disabled={isLoading} onClick={() => mutate()}>
+    <button
+      disabled={isLoading}
+      className="h-72 bg-gray-200"
+      onClick={() => mutate()}
+    >
       {isLoading ? "Creating" : "Create"} Note
     </button>
+  );
+};
+
+const NotePreview = ({
+  title,
+  content,
+  id,
+}: {
+  title: string;
+  content: string;
+  id: string;
+}) => {
+  // get first 100 characters of content
+  const contentExcerpt = useMemo(() => content.slice(0, 100), [content]);
+
+  return (
+    <div className="h-72 bg-gray-200">
+      <p>{contentExcerpt}</p>
+      <div>
+        <h2>
+          <a href={`/notes/${id}`}>{title}</a>
+        </h2>
+      </div>
+    </div>
   );
 };
 
