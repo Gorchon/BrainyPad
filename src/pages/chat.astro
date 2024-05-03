@@ -10,11 +10,26 @@ import Chatt from "../components/react/chat";
       <img
         src="/iconBrainy.webp"
         alt="Icono de Brainy AI"
-        style="width: 3.5rem; height: 3.5rem; border-radius: 9999px; margin-right: 1rem;"
+        class="w-14 h-14 rounded-full mr-4"
       />
-
       <h1 class="text-xl font-bold">Brainy AI</h1>
     </div>
-    <Chatt client:load />
+    <div class="flex justify-between">
+      <!-- Ajustado para separar los contenidos -->
+      <div class="flex-grow">
+        <Chatt client:load />
+      </div>
+      <div
+        class="fixed right-0 top-5 bg-[#e3e8ed] p-4 rounded-lg shadow-lg mr-5"
+        style={{ height: "95vh", width: "50vh" }}
+      >
+        <!-- Contenedor para las fuentes referenciadas, posicionado fijo -->
+        <h2 class="font-bold text-lg mb-3">Sources Referenced</h2>
+        <ul>
+          <li>1. Familiares</li>
+          <li>2. Familiares</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </Layout>
