@@ -24,3 +24,6 @@ pnpm-debug.log*
 .idea/
 
 .vercel
+
+# pnpm.lock
+pnpm-lock.yaml
