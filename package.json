@@ -2,16 +2,16 @@
   "name": "brainy-pad",
   "type": "module",
   "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "introspect": "drizzle-kit introspect:pg",
-    "generate": "drizzle-kit generate:pg",
-    "migrate": "tsx src/server/db/migrate.ts",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
+    "scripts": {
+      "dev": "astro dev",
+      "start": "astro dev",
+      "build": "astro check && astro build",
+      "introspect": "drizzle-kit introspect:pg",
+      "generate": "drizzle-kit generate:pg",
+      "migrate": "tsx src/server/db/migrate.ts",
+      "preview": "astro preview",
+      "astro": "astro"
+    },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
     "@astrojs/node": "^8.2.5",
