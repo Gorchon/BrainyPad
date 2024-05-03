@@ -7,9 +7,14 @@ import {
   Folders,
 } from "lucide-react";
 
+import { UserButton } from "@clerk/clerk-react";
+import ClerkContext from "./clerk-provider";
+
+const userButtonDimensions = { height: 60, width: 60 };
+
 const Sidebar = () => {
   return (
-    <>
+    <ClerkContext>
       <div
         className="flex flex-col w-80 bg-gray-200 shadow-md overflow-hidden z-10"
         style={{ height: "100vh" }}
@@ -54,19 +59,24 @@ const Sidebar = () => {
             </a>
           </li>
         </ul>
-        <div className="px-5 py-2 border-t w-full text-xl">
+        <div className="px-5 py-8 border-t w-full text-xl">
           {" "}
-          <div className="flex items-center justify-between">
-            <button className="flex items-center justify-center w-16 h-16 rounded-full bg-gray-300">
-              {" "}
-              <User size={24} className="stroke-dark" />{" "}
-            </button>
+          <div className="flex items-center space-x-8 px-4">
+            <UserButton
+              appearance={{
+                elements: {
+                  rootBox: userButtonDimensions,
+                  userButtonTrigger: userButtonDimensions,
+                  userButtonBox: userButtonDimensions,
+                  avatarBox: userButtonDimensions,
+                },
+              }}
+            />
             <span className="text-gray-800">User Name</span>
-            <Settings size={24} className="stroke-dark" />{" "}
           </div>
         </div>
       </div>
-    </>
+    </ClerkContext>
   );
 };
 
