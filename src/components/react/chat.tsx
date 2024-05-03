@@ -29,8 +29,15 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 rounded-lg shadow relative">
-      <div className="flex-grow overflow-auto p-4">
+    // <div className="flex flex-col h-screen bg-gray-100 rounded-lg shadow relative" >
+    <div
+      className="flex flex-col h-screen bg-gray-100 rounded-lg shadow relative"
+      style={{ height: "85vh" }}
+    >
+      <div
+        className="flex-grow overflow-auto p-4"
+        style={{ maxHeight: "calc(85vh - 75px)" }}
+      >
         {messages.map((message) => (
           <div
             key={message.id}
@@ -54,7 +61,7 @@ const Chat: React.FC = () => {
           placeholder="Escribe tu mensaje"
         />
         <button
-          className="bg-gray-600 hover:bg-blue-700 text-white px-7 py-2 rounded-r-lg focus:outline-none"
+          className="bg-gray-600 hover:bg-blue-700 text-white px-7 py-2 rounded-r-lg focus:outline-none border-2 border-gray-300"
           onClick={handleSend}
         >
           Enviar
