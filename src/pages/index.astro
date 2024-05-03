@@ -11,17 +11,18 @@ import { UserButton, SignIn } from "astro-clerk-auth/components/interactive";
 import MKEditor from "../components/react/MKEditor";
 ---
 
-<Layout title="Welcome to Astro.">
-  <SignedIn>
-    <UserButton />
+<SignedIn>
+  <Layout>
     <ReactHello client:load />
     <SolidHello client:load />
     <SvelteHello client:load />
     <VueHello client:load />
     <AstroHello />
-  </SignedIn>
-  
-  <SignedOut>
+  </Layout>
+</SignedIn>
+
+<SignedOut>
+  <div class="min-w-screen min-h-screen flex items-center justify-center">
     <SignIn routing="hash" />
-  </SignedOut>
-</Layout>
+  </div>
+</SignedOut>

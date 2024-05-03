@@ -1,0 +1,72 @@
+---
+// This is the component script section where you can import other components or scripts
+---
+
+<style>
+  .sidebar {
+    width: 250px; /* Adjust width as needed */
+    height: 100vh; /* Full-height */
+    background-color: #f8f9fa; /* Light grey background */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Adds shadow to the right side */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  .logo {
+    font-size: 24px;
+    margin-bottom: 40px; /* Space below the logo */
+  }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* Space between menu items */
+    font-size: 18px;
+    color: #333; /* Dark grey color for text */
+  }
+  .menu-item-icon {
+    margin-right: 10px; /* Space between icon and text */
+  }
+  .user-section {
+    margin-top: auto; /* Pushes to the bottom */
+    display: flex;
+    align-items: center;
+  }
+  .user-avatar {
+    border-radius: 50%; /* Makes the avatar round */
+    margin-right: 10px;
+  }
+  .user-name {
+    font-size: 18px;
+    color: #333;
+  }
+</style>
+
+<div class="sidebar">
+  <div class="logo">BrainyPad</div>
+  <div class="menu-item">
+    <span class="menu-item-icon"></span>
+    <a href="/home"><span class="menu-item-icon"></span>Home</a>
+  </div>
+  <div class="menu-item">
+    <span class="menu-item-icon"></span>
+    <a href="/search"><span class="menu-item-icon"></span>Search</a>
+  </div>
+  <div class="menu-item">
+    <span class="menu-item-icon"></span>
+    <a href="/chat"><span class="menu-item-icon"></span>Chat</a>
+  </div>
+  <div class="menu-item">
+    <span class="menu-item-icon"></span>
+    <a href="/files"><span class="menu-item-icon"></span>Files</a>
+  </div>
+  <div class="user-section">
+    <img
+      src="/path/to/avatar.jpg"
+      alt="User Avatar"
+      class="user-avatar"
+      width="40"
+      height="40"
+    />
+    <span class="user-name">User Name</span>
+  </div>
+</div>
