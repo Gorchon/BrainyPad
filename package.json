@@ -22,6 +22,7 @@
     "@astrojs/vercel": "^7.5.4",
     "@astrojs/vue": "^4.1.0",
     "@clerk/clerk-react": "^5.0.3",
+    "@clerk/clerk-sdk-node": "^5.0.3",
     "@mdxeditor/editor": "^3.0.4",
     "@tailwindcss/typography": "^0.5.13",
     "@types/react": "^18.3.1",
@@ -44,6 +45,7 @@
   "devDependencies": {
     "@types/node": "^20.12.8",
     "drizzle-kit": "^0.20.17",
+    "tsx": "^4.9.0",
     "vercel": "^34.1.7"
   }
 }
