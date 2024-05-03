@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './recentFiles.css';
 
 function RecentFiles() {
@@ -6,6 +6,17 @@ function RecentFiles() {
     const [files, setFiles] = useState<{ name: string; url: string; }[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        const storedFiles = localStorage.getItem('recentFiles');
+        if (storedFiles) {
+            setFiles(JSON.parse(storedFiles));
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('recentFiles', JSON.stringify(files));
+    }, [files]);
 
     function selectFiles() {
         if (fileInputRef.current) {
@@ -71,8 +82,8 @@ function RecentFiles() {
         // Aquí puedes implementar la lógica para subir los archivos al servidor
     }
 
-    function prueba(){
-        console.log("funciona")
+    function openFileInNewTab(url: string) {
+        window.open(url, '_blank');
     }
 
     return (
@@ -98,12 +109,12 @@ function RecentFiles() {
                 {files.map((file, index) => (
                     <div className='file' key={index}>
                         <div className='uploadedFiles'>
-                            <div className='img'>
+                            <div className='img' onClick={() => openFileInNewTab(file.url)}>
                                 <img src="../public/file.svg" alt="file" width={80} height={80}  />
                             </div>
                             <div className='footer'>
                             <p>{file.name}</p>
-                            {/* <span className='delete' onClick={() => deleteFile(index)}><img  src="../public/delete.svg" alt="file" width={40} height={40}   />  </span> */}
+                            <div className='delete' onClick={() => deleteFile(index)}><img  src="../public/delete.svg" alt="file" width={40} height={40}   />  </div>
                             </div>
                         </div>
 
