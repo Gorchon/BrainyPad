@@ -44,6 +44,7 @@
   "devDependencies": {
     "@types/node": "^20.12.8",
     "drizzle-kit": "^0.20.17",
+    "tsx": "^4.9.0",
     "vercel": "^34.1.7"
   }
 }
