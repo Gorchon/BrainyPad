@@ -6,12 +6,15 @@ import { Hello as SolidHello } from "../components/solid/hello";
 import SvelteHello from "../components/svelte/hello.svelte";
 import VueHello from "../components/vue/hello.vue";
 import AstroHello from "../components/astro/hello.astro";
+import RecentFiles from "../components/react/RecentFiles";
 ---
 
 <Layout title="Welcome to Astro.">
-  <ReactHello client:load />
+  <!-- <ReactHello client:load />
   <SolidHello client:load />
   <SvelteHello client:load />
   <VueHello client:load />
-  <AstroHello />
+  <AstroHello /> -->
+  <RecentFiles client:load/>
+
 </Layout>
