@@ -1,0 +1,12 @@
+---
+// Import your layout and the Chat component
+import Layout from "../layouts/Layout.astro";
+import Chatt from "../components/react/chat";
+---
+
+<Layout client:load>
+  <div class="container mx-auto px-4">
+    <h1 class="text-xl font-bold mb-4">Chat Application</h1>
+    <Chatt client:load />
+  </div>
+</Layout>
