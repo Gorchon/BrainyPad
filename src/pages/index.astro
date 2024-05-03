@@ -1,26 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
-
-import { Hello as ReactHello } from "../components/react/hello";
-import { Hello as SolidHello } from "../components/solid/hello";
-import SvelteHello from "../components/svelte/hello.svelte";
-import VueHello from "../components/vue/hello.vue";
-import AstroHello from "../components/astro/hello.astro";
-import RecentFiles from "../components/react/RecentFiles";
-import { SignedIn, SignedOut } from "astro-clerk-auth/components/control";
-import { UserButton, SignIn } from "astro-clerk-auth/components/interactive";
-import MKEditor from "../components/react/MKEditor";
+import Page from "../layouts/Page.astro";
 ---
 
-<SignedIn>
-  <Layout>
-    <MKEditor client:load />
-    <RecentFiles client:load />
-  </Layout>
-</SignedIn>
-
-<SignedOut>
-  <div class="min-w-screen min-h-screen flex items-center justify-center">
-    <SignIn routing="hash" />
-  </div>
-</SignedOut>
+<Page title="Brainy Pad"> hello world </Page>
