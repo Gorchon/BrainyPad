@@ -25,4 +25,5 @@ pnpm-debug.log*
 
 .vercel
 
+# pnpm.lock
 pnpm-lock.yaml

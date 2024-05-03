@@ -1,11 +1,14 @@
 {
-  "name": "",
+  "name": "brainy-pad",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
+    "introspect": "drizzle-kit introspect:pg",
+    "generate": "drizzle-kit generate:pg",
+    "migrate": "tsx src/server/db/migrate.ts",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -23,9 +26,12 @@
     "@clerk/clerk-react": "^5.0.3",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
-    "astro": "^4.7.0",
+    "astro": "^4.7.1",
     "astro-clerk-auth": "^0.5.0",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.30.10",
     "lucide-react": "^0.377.0",
+    "postgres": "^3.4.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.0",
@@ -34,5 +40,9 @@
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5",
     "vue": "^3.4.26"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8",
+    "drizzle-kit": "^0.20.17"
   }
 }
