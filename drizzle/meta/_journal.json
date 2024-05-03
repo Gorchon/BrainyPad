@@ -8,6 +8,13 @@
       "when": 1714721606407,
       "tag": "0000_free_hiroim",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1714745726735,
+      "tag": "0001_outgoing_shinko_yamashiro",
+      "breakpoints": true
     }
   ]
 }
