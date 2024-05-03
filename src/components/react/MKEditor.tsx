@@ -24,7 +24,6 @@ import {
   sandpackPlugin,
   ShowSandpackInfo,
   tablePlugin,
-  thematicBreakPlugin,
   toolbarPlugin,
   UndoRedo,
   type SandpackConfig,
@@ -34,14 +33,21 @@ import { headingsPlugin } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { useEffect, useState } from "react";
 
-export default function MKEditor() {
+interface MKEditorProps {
+  initialMarkdown?: string;
+  onChange?: (markdown: string) => void;
+}
+
+export default function MKEditor({
+  initialMarkdown = "",
+  onChange,
+}: MKEditorProps) {
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const [markdown, setMarkdown] = useState(initialMarkdown);
 
   useEffect(() => {
     setIsFirstRender(false);
   }, []);
-
-  const markdown = `## Hello world`;
 
   async function imageUploadHandler(image: File) {
     const formData = new FormData();
@@ -87,6 +93,10 @@ export default function App() {
     <>
       {!isFirstRender && (
         <MDXEditor
+          onChange={(newMarkdown) => {
+            setMarkdown(newMarkdown);
+            onChange?.(newMarkdown);
+          }}
           markdown={markdown}
           className="outline-orange-400 outline w-full"
           contentEditableClassName="prose"

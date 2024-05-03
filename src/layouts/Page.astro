@@ -1,0 +1,36 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+import { SignedIn, SignedOut } from "astro-clerk-auth/components/control";
+import { SignIn } from "astro-clerk-auth/components/interactive";
+import Layout from "./Layout.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <SignedIn>
+      <Layout>
+        <slot />
+      </Layout>
+    </SignedIn>
+    <SignedOut>
+      <div class="min-w-screen min-h-screen flex items-center justify-center">
+        <SignIn routing="hash" />
+      </div>
+    </SignedOut>
+    <slot />
+  </body>
+</html>
