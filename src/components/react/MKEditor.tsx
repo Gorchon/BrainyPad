@@ -32,12 +32,16 @@ import {
 import { headingsPlugin } from "@mdxeditor/editor";
 
 import "@mdxeditor/editor/style.css";
+import { useEffect, useState } from "react";
 
 export default function MKEditor() {
-  const markdown = `
-    # Something
-    ## Something else
-`;
+  const [isFirstRender, setIsFirstRender] = useState(true);
+
+  useEffect(() => {
+    setIsFirstRender(false);
+  }, []);
+
+  const markdown = `## Hello world`;
 
   async function imageUploadHandler(image: File) {
     const formData = new FormData();
@@ -80,63 +84,66 @@ export default function App() {
   };
 
   return (
-    <MDXEditor
-      markdown={markdown}
-      className="outline-orange-400 outline w-full"
-      contentEditableClassName="prose"
-      plugins={[
-        headingsPlugin(),
-        listsPlugin(),
-        linkPlugin(),
-        quotePlugin(),
-        markdownShortcutPlugin(),
-        tablePlugin(),
-        frontmatterPlugin(),
-        toolbarPlugin({
-          toolbarContents: () => (
-            <>
-              {" "}
-              <UndoRedo />
-              <BoldItalicUnderlineToggles />
-              <InsertAdmonition />
-              <CreateLink />
-              <CodeToggle />
-              <ConditionalContents
-                options={[
-                  {
-                    when: (editor) => editor?.editorType === "codeblock",
-                    contents: () => <ChangeCodeMirrorLanguage />,
-                  },
-                  {
-                    when: (editor) => editor?.editorType === "sandpack",
-                    contents: () => <ShowSandpackInfo />,
-                  },
-                  {
-                    fallback: () => (
-                      <>
-                        <InsertCodeBlock />
-                        <InsertSandpack />
-                      </>
-                    ),
-                  },
-                ]}
-              />
-              <ListsToggle />
-              <InsertTable />
-            </>
-          ),
-        }),
-        linkDialogPlugin(),
-        imagePlugin({ imageUploadHandler }),
-        directivesPlugin({
-          directiveDescriptors: [AdmonitionDirectiveDescriptor],
-        }),
-        codeBlockPlugin({ defaultCodeBlockLanguage: "js" }),
-        sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
-        codeMirrorPlugin({
-          codeBlockLanguages: { js: "JavaScript", css: "CSS" },
-        }),
-      ]}
-    />
+    <>
+      {!isFirstRender && (
+        <MDXEditor
+          markdown={markdown}
+          className="outline-orange-400 outline w-full"
+          contentEditableClassName="prose"
+          plugins={[
+            headingsPlugin(),
+            listsPlugin(),
+            linkPlugin(),
+            quotePlugin(),
+            markdownShortcutPlugin(),
+            tablePlugin(),
+            frontmatterPlugin(),
+            toolbarPlugin({
+              toolbarContents: () => (
+                <>
+                  <UndoRedo />
+                  <BoldItalicUnderlineToggles />
+                  <InsertAdmonition />
+                  <CreateLink />
+                  <CodeToggle />
+                  <ConditionalContents
+                    options={[
+                      {
+                        when: (editor) => editor?.editorType === "codeblock",
+                        contents: () => <ChangeCodeMirrorLanguage />,
+                      },
+                      {
+                        when: (editor) => editor?.editorType === "sandpack",
+                        contents: () => <ShowSandpackInfo />,
+                      },
+                      {
+                        fallback: () => (
+                          <>
+                            <InsertCodeBlock />
+                            <InsertSandpack />
+                          </>
+                        ),
+                      },
+                    ]}
+                  />
+                  <ListsToggle />
+                  <InsertTable />
+                </>
+              ),
+            }),
+            linkDialogPlugin(),
+            imagePlugin({ imageUploadHandler }),
+            directivesPlugin({
+              directiveDescriptors: [AdmonitionDirectiveDescriptor],
+            }),
+            codeBlockPlugin({ defaultCodeBlockLanguage: "js" }),
+            sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
+            codeMirrorPlugin({
+              codeBlockLanguages: { js: "JavaScript", css: "CSS" },
+            }),
+          ]}
+        />
+      )}
+    </>
   );
 }
