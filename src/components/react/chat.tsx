@@ -31,7 +31,7 @@ const Chat: React.FC = () => {
   return (
     // <div className="flex flex-col h-screen bg-gray-100 rounded-lg shadow relative" >
     <div
-      className="flex flex-col h-screen bg-gray-100 rounded-lg shadow relative"
+      className="flex flex-col h-screen bg-[#e3e8ed] rounded-lg shadow relative"
       style={{ height: "85vh" }}
     >
       <div
@@ -52,7 +52,7 @@ const Chat: React.FC = () => {
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <div className="flex items-center p-2 bg-white absolute bottom-0 w-full">
+      <div className="flex items-center p-2 bg-gray-100 absolute bottom-0 w-full">
         <input
           className="flex-grow p-2 border-2 border-r-0 border-gray-300 rounded-l-lg focus:outline-none"
           value={input}
