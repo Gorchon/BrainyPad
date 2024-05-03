@@ -33,7 +33,7 @@ const Sidebar = () => {
           {" "}
           <li>
             <a
-              href="/home"
+              href="/"
               className="flex items-center space-x-3 text-gray-700 hover:text-blue-500" // Aumentado espacio
             >
               <Home size={24} />
