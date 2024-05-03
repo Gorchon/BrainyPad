@@ -1,5 +1,21 @@
 ---
 import Page from "../layouts/Page.astro";
+import RecentNotes from "../components/react/recent-notes";
 ---
 
-<Page title="Brainy Pad"> hello world </Page>
+<Page title="Brainy Pad">
+  <div>
+    <h2>Home</h2>
+    <h3>Recent notes</h3>
+  </div>
+
+  <div>
+    <RecentNotes client:load />
+  </div>
+
+  <div>
+    <h3>Recent files</h3>
+  </div>
+
+  <div></div>
+</Page>
