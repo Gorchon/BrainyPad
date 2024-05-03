@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { allUsers } from "../../server/queries";
+import { allUsers } from "../../server/queries/getAllUsers";
 
 export const GET: APIRoute = ({ request }) => {
   return new Response(
