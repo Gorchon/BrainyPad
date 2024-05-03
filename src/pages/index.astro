@@ -8,6 +8,7 @@ import VueHello from "../components/vue/hello.vue";
 import AstroHello from "../components/astro/hello.astro";
 import { SignedIn, SignedOut } from "astro-clerk-auth/components/control";
 import { UserButton, SignIn } from "astro-clerk-auth/components/interactive";
+import MKEditor from "../components/react/MKEditor";
 ---
 
 <Layout title="Welcome to Astro.">
@@ -19,7 +20,7 @@ import { UserButton, SignIn } from "astro-clerk-auth/components/interactive";
     <VueHello client:load />
     <AstroHello />
   </SignedIn>
-
+  
   <SignedOut>
     <SignIn routing="hash" />
   </SignedOut>
