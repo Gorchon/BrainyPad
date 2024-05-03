@@ -31,6 +31,7 @@
     "astro-clerk-auth": "^0.5.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.10",
+    "lucide": "^0.378.0",
     "lucide-react": "^0.377.0",
     "postgres": "^3.4.4",
     "react": "^18.3.1",
