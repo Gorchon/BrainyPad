@@ -1,0 +1,11 @@
+---
+import Page from "../../layouts/Page.astro";
+
+const { id } = Astro.params;
+---
+
+<Page title={`Note ${id}`}>
+  <div>
+    Welcome to note {id}!
+  </div>
+</Page>
