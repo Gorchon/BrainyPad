@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
-import type { FileSelect, NoteSelect } from "../../server/db/types";
+import type { NoteSelect } from "../../server/db/types";
 import type { NewNoteBody } from "../../pages/api/notes/new";
 
 interface RecentNotesProps {

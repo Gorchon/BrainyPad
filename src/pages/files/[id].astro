@@ -1,0 +1,14 @@
+---
+import Page from "../../layouts/Page.astro";
+import FilePreview from "../../components/react/file-preview";
+
+const { id: paramsId } = Astro.params;
+const id = paramsId!;
+---
+
+<Page title={`Note ${id}`}>
+  <div>
+    Welcome to file {id}!
+  </div>
+  <FilePreview client:load id={id} />
+</Page>

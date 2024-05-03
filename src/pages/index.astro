@@ -1,6 +1,7 @@
 ---
 import Page from "../layouts/Page.astro";
 import RecentNotes from "../components/react/recent-notes";
+import RecentFiles from "../components/react/recent-files";
 ---
 
 <Page title="Brainy Pad">
@@ -17,5 +18,7 @@ import RecentNotes from "../components/react/recent-notes";
     <h3>Recent files</h3>
   </div>
 
-  <div></div>
+  <div>
+    <RecentFiles client:load />
+  </div>
 </Page>
