@@ -9,10 +9,19 @@ import {
 
 import { UserButton } from "@clerk/clerk-react";
 import ClerkContext from "./clerk-provider";
+import { useEffect, useState } from "react";
 
 const userButtonDimensions = { height: 60, width: 60 };
 
 const Sidebar = () => {
+  const [firstLoad, setFirstLoad] = useState(true);
+
+  useEffect(() => {
+    if (firstLoad) {
+      setFirstLoad(false);
+    }
+  }, []);
+
   return (
     <ClerkContext>
       <div
@@ -62,16 +71,18 @@ const Sidebar = () => {
         <div className="px-5 py-8 border-t w-full text-xl">
           {" "}
           <div className="flex items-center space-x-8 px-4">
-            <UserButton
-              appearance={{
-                elements: {
-                  rootBox: userButtonDimensions,
-                  userButtonTrigger: userButtonDimensions,
-                  userButtonBox: userButtonDimensions,
-                  avatarBox: userButtonDimensions,
-                },
-              }}
-            />
+            {!firstLoad && (
+              <UserButton
+                appearance={{
+                  elements: {
+                    rootBox: userButtonDimensions,
+                    userButtonTrigger: userButtonDimensions,
+                    userButtonBox: userButtonDimensions,
+                    avatarBox: userButtonDimensions,
+                  },
+                }}
+              />
+            )}
             <span className="text-gray-800">User Name</span>
           </div>
         </div>
