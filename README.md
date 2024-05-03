@@ -33,8 +33,9 @@ To get started with QuizNote, follow these simple steps:
 
 To generate schema changes with Drizzle, you can use the `generate` script from your `package.json`. This script utilizes Drizzle's capabilities to introspect your PostgreSQL database and generate the necessary schema files.
 
-`` `bas h
-pnpm generate `` `
+```bash
+pnpm generate
+```
 
 This command should be run after you've made changes to your database schema. It will update the schema files to reflect your current database structure.
 
@@ -42,8 +43,9 @@ This command should be run after you've made changes to your database schema. It
 
 Once you have generated the schema changes, you can apply these changes to your database using the `migrate` script.
 
-`` `bas h
-pnpm migrate `` `
+```bash
+pnpm migrate
+```
 
 This script will execute the `migrate.ts` file located in the `src/server/db` directory of your project, applying the new schema changes to your database.
 
