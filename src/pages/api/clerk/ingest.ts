@@ -59,6 +59,8 @@ export const POST: APIRoute = async ({ request }) => {
         name: (evt.data.first_name || "") + " " + (evt.data.last_name || ""),
         email: evt.data.email_addresses[0]!.email_address,
         id: evt.data.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
       break;
     }
@@ -71,6 +73,7 @@ export const POST: APIRoute = async ({ request }) => {
         email: evt.data.email_addresses[0]!.email_address,
         name: (evt.data.first_name || "") + " " + (evt.data.last_name || ""),
         id: evt.data.id,
+        updatedAt: new Date(),
       });
       break;
     }
