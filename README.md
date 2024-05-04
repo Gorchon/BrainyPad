@@ -1,5 +1,7 @@
 # BrainyPad: Interactive Learning Through AI-Enhanced Notes
 
+## [Live deploy](https://brainypad-deploy.vercel.app/)
+
 ## Introduction
 
 Welcome to BrainyPad, where your notes come to life! This innovative app leverages cutting-edge artificial intelligence to transform your study notes into interactive quizzes, helping reinforce your learning and ensuring you grasp the most important concepts. Whether you're a student, a lifelong learner, or a professional brushing up on new material, QuizNote is designed to enhance your learning experience by making study time both efficient and effective.
