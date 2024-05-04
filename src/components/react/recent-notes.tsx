@@ -3,6 +3,7 @@ import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { NoteSelect } from "../../server/db/types";
 import type { NewNoteBody } from "../../pages/api/notes/new";
+import { CirclePlus } from "lucide-react";
 
 interface RecentNotesProps {
   children?: React.ReactNode;
@@ -56,9 +57,10 @@ const CreateNoteButton = () => {
   return (
     <button
       disabled={isLoading}
-      className="h-72 bg-gray-200"
+      className="h-72 my-2 bg-white outline outline-4 outline-gray-200 flex flex-col justify-center space-x-3 items-center text-lg hover:scale-[1.015] transition-all ease-out duration-200"
       onClick={() => mutate()}
     >
+      <CirclePlus size={30}/>
       {isLoading ? "Creating" : "Create"} Note
     </button>
   );

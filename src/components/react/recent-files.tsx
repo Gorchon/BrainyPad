@@ -3,6 +3,7 @@ import "./recent-files.css";
 import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { FileSelect } from "../../server/db/types";
+import { CirclePlus, Trash } from "lucide-react";
 
 function RecentFiles() {
   return (
@@ -36,18 +37,16 @@ function FilePreview({ name, id }: { name: string; id: string }) {
 
   return (
     <div
-      className="h-72 bg-gray-200 cursor-pointer"
+      className="h-72 bg-white cursor-pointer hover:scale-[1.015] my-2 transition-all ease-out duration-200"
       onClick={() => navigateTo(`/files/${id}`)}
     >
-      <div className="uploadedFiles">
+      <div className="uploadedFiles outline outline-4 outline-gray-200">
         <div className="img">
           <img src="../public/file.svg" alt="file" width={80} height={80} />
         </div>
-        <div className="footer">
+        <div className="footer px-4 py-2 text-xl">
           <p>{name}</p>
-          <div className="delete">
-            <img src="../public/delete.svg" alt="file" width={40} height={40} />{" "}
-          </div>
+          <Trash size={32} />
         </div>
       </div>
     </div>
@@ -119,27 +118,22 @@ function UploadFileButton() {
 
   return (
     <div
-      className="h-72 bg-gray-200"
+      className="h-72 my-2 bg-white outline outline-4 outline-gray-200 flex flex-col justify-center items-center text-lg hover:scale-[1.015] transition-all ease-out duration-200"
       onDragOver={onDragOver}
       onDragLeave={onDragleave}
       onDrop={onDragDrop}
     >
       {isLoading ? (
-        <span>Uploading...</span>
+        <span className="text-lg">Uploading...</span>
       ) : (
         <>
           {isDragging ? (
-            <span className="select">Drop files here</span>
+            <span className="select text-lg">Drop files here</span>
           ) : (
             <>
-              <button className="input" onClick={selectFiles}>
-                <img
-                  src="../public/addFile.png"
-                  alt="add File"
-                  width={80}
-                  height={80}
-                />
-                <p>Upload files</p>
+              <button className="input flex flex-col justify-center items-center" onClick={selectFiles}>
+                <CirclePlus size={30}/>
+                <p className="text-lg">Upload files</p>
               </button>
             </>
           )}
