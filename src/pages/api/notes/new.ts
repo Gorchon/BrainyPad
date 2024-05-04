@@ -21,7 +21,7 @@ export const POST: APIRoute = async ({ locals, request }) => {
 
   await db.insert(notes).values({
     id: crypto.randomUUID(),
-    content: "## Lorem ipsum\nDolor sit amet",
+    content: "",
     createdAt: new Date(),
     updatedAt: new Date(),
     userId: currentUser.id,

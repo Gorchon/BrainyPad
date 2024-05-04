@@ -3,7 +3,7 @@ import "./recent-files.css";
 import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { FileSelect } from "../../server/db/types";
-import { CirclePlus, Trash } from "lucide-react";
+import { CirclePlus, Trash, File } from "lucide-react";
 
 function RecentFiles() {
   return (
@@ -42,7 +42,7 @@ function FilePreview({ name, id }: { name: string; id: string }) {
     >
       <div className="uploadedFiles outline outline-4 outline-gray-200">
         <div className="img">
-          <img src="../public/file.svg" alt="file" width={80} height={80} />
+          <File size={50}/>
         </div>
         <div className="footer px-4 py-2 text-xl">
           <p>{name}</p>

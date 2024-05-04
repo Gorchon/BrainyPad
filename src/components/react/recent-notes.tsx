@@ -3,7 +3,7 @@ import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { NoteSelect } from "../../server/db/types";
 import type { NewNoteBody } from "../../pages/api/notes/new";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, GripHorizontal } from "lucide-react";
 
 interface RecentNotesProps {
   children?: React.ReactNode;
@@ -79,12 +79,12 @@ const NotePreview = ({
   const contentExcerpt = useMemo(() => content.slice(0, 100), [content]);
 
   return (
-    <div className="h-72 bg-gray-200">
-      <p>{contentExcerpt}</p>
-      <div>
-        <h2>
+    <div className="h-72 outline outline-4 bg-white outline-gray-200 flex flex-col justify-end hover:scale-[1.015] z-0 transition-all ease-out duration-20 my-2">
+      <div className="bg-gray-400 h-16 w-full flex items-center justify-start px-2 text-xl font-medium outline z-20 outline-3 outline-gray-600">
+        <span className="flex w-full justify-between items-center">
           <a href={`/notes/${id}`}>{title}</a>
-        </h2>
+          <GripHorizontal size={24} className="mr-2"/>
+        </span>
       </div>
     </div>
   );
