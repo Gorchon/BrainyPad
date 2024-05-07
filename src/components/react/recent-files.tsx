@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./recent-files.css";
 import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { FileSelect } from "../../server/db/types";
@@ -40,11 +39,11 @@ function FilePreview({ name, id }: { name: string; id: string }) {
       className="h-72 bg-white cursor-pointer hover:scale-[1.015] my-2 transition-all ease-out duration-200"
       onClick={() => navigateTo(`/files/${id}`)}
     >
-      <div className="uploadedFiles outline outline-4 outline-gray-200">
-        <div className="img">
+      <div className="relative h-72 outline outline-4 bg-white outline-gray-200 flex flex-col justify-center">  {/* tarjeta de archivo*/}
+        <div className="flex justify-center">
           <File size={50}/>
         </div>
-        <div className="footer px-4 py-2 text-xl">
+        <div className=" absolute bottom-0 w-full px-4 h-16 py-2 text-xl outline outline-1 outline-gray-600 bg-gray-400 flex flex-row"> 
           <p>{name}</p>
           <Trash size={32} />
         </div>
@@ -131,7 +130,7 @@ function UploadFileButton() {
             <span className="select text-lg">Drop files here</span>
           ) : (
             <>
-              <button className="input flex flex-col justify-center items-center" onClick={selectFiles}>
+              <button className="flex flex-col justify-center items-center" onClick={selectFiles}>
                 <CirclePlus size={30}/>
                 <p className="text-lg">Upload files</p>
               </button>
