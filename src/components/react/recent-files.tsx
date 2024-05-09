@@ -39,7 +39,7 @@ function FilePreview({ name, id }: { name: string; id: string }) {
       className="h-72 bg-white cursor-pointer hover:scale-[1.015] my-2 transition-all ease-out duration-200"
       onClick={() => navigateTo(`/files/${id}`)}
     >
-      <div className="relative h-72 outline outline-3 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-center">  {/* tarjeta de archivo*/}
+      <div className="relative h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-center">  {/* tarjeta de archivo*/}
         <div className="flex justify-center">
           <File size={50} className="dark:stroke-white"/>
         </div>
