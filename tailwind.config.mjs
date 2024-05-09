@@ -9,8 +9,8 @@ export default {
         'background': '#1B1B1F',
         'card' : '#474252',
         'card-footer' : '#312B3D', 
-        'borders' : '#310A5D',
-        'sidebar' : '#161618', //posible color para la sidebar
+        'borders' : '#463A54',
+        'sidebar' : '#232329'
       },
     },
   },
