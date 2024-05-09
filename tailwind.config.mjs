@@ -6,10 +6,11 @@ export default {
     extend: {
 // colores para el dark mode
       colors: {
-        'fondo': '#000000',
-        'azul' : '#150050',
-        'gris' : '#463E59',
-        'morado' : '#310A5D'
+        'background': '#1B1B1F',
+        'card' : '#474252',
+        'card-footer' : '#312B3D', 
+        'borders' : '#310A5D',
+        'sidebar' : '#161618', //posible color para la sidebar
       },
     },
   },

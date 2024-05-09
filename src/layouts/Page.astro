@@ -11,7 +11,7 @@ import Layout from "./Layout.astro";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Astro description" />
@@ -20,7 +20,7 @@ import Layout from "./Layout.astro";
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body>
+  <body class="dark:bg-fondo"> <!-- body color -->
     <SignedIn>
       <Layout>
         <slot />

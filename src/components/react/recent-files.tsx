@@ -39,13 +39,13 @@ function FilePreview({ name, id }: { name: string; id: string }) {
       className="h-72 bg-white cursor-pointer hover:scale-[1.015] my-2 transition-all ease-out duration-200"
       onClick={() => navigateTo(`/files/${id}`)}
     >
-      <div className="relative h-72 outline outline-4 bg-white outline-gray-200 flex flex-col justify-center">  {/* tarjeta de archivo*/}
+      <div className="relative h-72 outline outline-3 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-center">  {/* tarjeta de archivo*/}
         <div className="flex justify-center">
-          <File size={50}/>
+          <File size={50} className="dark:stroke-white"/>
         </div>
-        <div className=" absolute bottom-0 w-full px-4 h-16 py-2 text-xl outline outline-1 outline-gray-600 bg-gray-400 flex flex-row"> 
-          <p>{name}</p>
-          <Trash size={32} />
+        <div className=" absolute bottom-0 w-full px-4 h-16 py-2 text-xl outline outline-1 outline-gray-600 dark:outline-borders bg-gray-400 dark:bg-card-footer flex flex-row"> 
+          <p className="dark:text-white">{name}</p>
+          <Trash size={32} className="dark:stroke-white"/>
         </div>
       </div>
     </div>
@@ -117,7 +117,7 @@ function UploadFileButton() {
 
   return (
     <div
-      className="h-72 my-2 bg-white outline outline-4 outline-gray-200 flex flex-col justify-center items-center text-lg hover:scale-[1.015] transition-all ease-out duration-200"
+      className="h-72 my-2 bg-white dark:bg-card outline outline-4 outline-gray-200 dark:outline-borders flex flex-col justify-center items-center text-lg hover:scale-[1.015] transition-all ease-out duration-200"
       onDragOver={onDragOver}
       onDragLeave={onDragleave}
       onDrop={onDragDrop}
@@ -131,8 +131,8 @@ function UploadFileButton() {
           ) : (
             <>
               <button className="flex flex-col justify-center items-center" onClick={selectFiles}>
-                <CirclePlus size={30}/>
-                <p className="text-lg">Upload files</p>
+                <CirclePlus size={30} className="dark:stroke-white"/>
+                <p className="text-lg dark:text-white">Upload files</p>
               </button>
             </>
           )}
