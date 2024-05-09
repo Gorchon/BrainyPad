@@ -22,7 +22,7 @@ function InnerRecentNotes() {
     queryKey: "files",
   });
 
-  if (isLoading || !data) return <div>Loading...</div>;
+  if (isLoading || !data) return <div className="dark:text-white ">Loading...</div>;
 
   return data.map((file) => (
     <FilePreview key={file.id} name={file.name ?? ""} id={file.id} />
@@ -123,7 +123,7 @@ function UploadFileButton() {
       onDrop={onDragDrop}
     >
       {isLoading ? (
-        <span className="text-lg">Uploading...</span>
+        <span className="text-lg dark:text-white">Uploading...</span>
       ) : (
         <>
           {isDragging ? (
