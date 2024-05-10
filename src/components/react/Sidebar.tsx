@@ -23,6 +23,7 @@ const Sidebar = () => {
   }
   return "light";});
 
+  //lol
 useEffect(() => {
   if(theme === "dark") {
     const htmlElement = document.querySelector("html");
