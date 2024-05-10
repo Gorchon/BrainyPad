@@ -17,24 +17,30 @@ const userButtonDimensions = { height: 60, width: 60 };
 
 const Sidebar = () => {
 
-  const [theme, setTheme] = useState(("light"));
+  const [theme, setTheme] = useState(()=> {  
+    if(window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    return "dark";
+  }
+  return "light";});
 
 useEffect(() => {
   if(theme === "dark") {
     const htmlElement = document.querySelector("html");
     if (htmlElement) {
+      htmlElement.classList.remove("light");
       htmlElement.classList.add("dark");
     }
   } else {
     const htmlElement = document.querySelector("html");
     if (htmlElement) {
       htmlElement.classList.remove("dark");
+      htmlElement.classList.add("light");
     }
   }
 }, [theme]);
 
 const handleChangeTheme = () => {
-  setTheme(prevTheme => prevTheme  === "light" ? "dark" : "light");
+  setTheme((prevTheme) => ( prevTheme === "light" ? "dark" : "light"));
 };
   const [firstLoad, setFirstLoad] = useState(true);
 
