@@ -12,15 +12,14 @@ import ReactSidebar from "../components/react/Sidebar";
     width: 100%; /* Takes up the remaining space */
     flex-grow: 1; /* Takes up the remaining space */
     padding: 20px; /* Padding around the content */
-    background-color: #fff; /* White background for the content area */
     overflow-y: auto; /* Adds scroll to content if needed */
   }
 </style>
 
-<div class="container">
-  <ReactSidebar client:load />
+<div class="container bg-white dark:bg-background">
+  <ReactSidebar client:only="react" />
   <!-- <Sidebar client:load /> -->
-  <main class="content">
+  <main class="content bg-white dark:bg-background"> <!-- layout color -->
     <slot />
     <!-- This slot will be replaced by specific page content -->
   </main>
