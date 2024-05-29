@@ -1,17 +1,13 @@
 import {
-  User,
-  Settings,
   Home,
   Search,
   MessageCircleMore,
   Folders,
-  SunMedium,
-  Moon,
 } from "lucide-react";
 
 import { UserButton } from "@clerk/clerk-react";
 import ClerkContext from "./clerk-provider";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const userButtonDimensions = { height: 60, width: 60 };
 
@@ -94,15 +90,15 @@ const Sidebar = () => {
         </ul>
 
         <button
-          className={`ml-8 w-20 h-10 rounded-full bg-white flex items-center transition duration-300 focus:outline-none shadow `}
+          className={`ml-8 w-16 h-8 rounded-full bg-white flex items-center transition duration-300 focus:outline-none shadow `}
           onClick={() => setIsDarkmode(!isDarkmode)}
         >
           <div
             id="switch-toggle"
-            className={`w-12 h-12 relative rounded-full transition duration-500 transform p-1 text-white ${
+            className={`w-8 h-8 relative rounded-full transition duration-500 transform p-1 text-white ${
               isDarkmode
                 ? "bg-gray-700 translate-x-full"
-                : "bg-yellow-500 -translate-x-2"
+                : "bg-borders -translate-x-2"
             }`}
           >
             {isDarkmode ? (
