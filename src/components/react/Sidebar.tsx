@@ -16,33 +16,15 @@ import React, { useEffect, useState } from "react";
 const userButtonDimensions = { height: 60, width: 60 };
 
 const Sidebar = () => {
-  const [theme, setTheme] = useState(() => {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
+  const [isDarkmode, setIsDarkmode] = useState(()=>{
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches && localStorage.getItem("isDarkmode") === null) {
+      return true;
     }
-    return "light";
+    if (localStorage.getItem("isDarkmode") === "true") {
+      return true;
+    }
+    return false;
   });
-
-  //lol lmao
-  useEffect(() => {
-    if (theme === "dark") {
-      const htmlElement = document.querySelector("html");
-      if (htmlElement) {
-        htmlElement.classList.remove("light");
-        htmlElement.classList.add("dark");
-      }
-    } else {
-      const htmlElement = document.querySelector("html");
-      if (htmlElement) {
-        htmlElement.classList.remove("dark");
-        htmlElement.classList.add("light");
-      }
-    }
-  }, [theme]);
-
-  const handleChangeTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  };
   const [firstLoad, setFirstLoad] = useState(true);
 
   useEffect(() => {
@@ -50,6 +32,19 @@ const Sidebar = () => {
       setFirstLoad(false);
     }
   }, []);
+
+  useEffect(() => {
+    setIsDarkmode(localStorage.getItem("isDarkmode") === "true");
+  }, []);
+
+  useEffect(() => {
+    const htmlElement = document.querySelector("html");
+    if (htmlElement) {
+      htmlElement.classList.remove(isDarkmode ? "light" : "dark");
+      htmlElement.classList.add(isDarkmode ? "dark" : "light");
+    }
+    localStorage.setItem("isDarkmode", String(isDarkmode));
+  }, [isDarkmode]);
 
   return (
     <ClerkContext>
@@ -98,18 +93,49 @@ const Sidebar = () => {
           </li>
         </ul>
 
-        <label className="inline-flex items-center cursor-pointer">
-          <input type="checkbox" value="" className="sr-only peer" />
-          <span className="ms-3"></span>
-          <SunMedium size={30} className="dark:stroke-white" />
-          <span className="ms-3"></span>
+        <button
+          className={`ml-8 w-20 h-10 rounded-full bg-white flex items-center transition duration-300 focus:outline-none shadow `}
+          onClick={() => setIsDarkmode(!isDarkmode)}
+        >
           <div
-            className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 outline outline-1 outline-gray-900"
-            onClick={handleChangeTheme}
-          ></div>
-          <span className="ms-3"></span>
-          <Moon size={25} className="dark:stroke-white" />
-        </label>
+            id="switch-toggle"
+            className={`w-12 h-12 relative rounded-full transition duration-500 transform p-1 text-white ${
+              isDarkmode
+                ? "bg-gray-700 translate-x-full"
+                : "bg-yellow-500 -translate-x-2"
+            }`}
+          >
+            {isDarkmode ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+            )}
+          </div>
+        </button>
 
         <br />
 
