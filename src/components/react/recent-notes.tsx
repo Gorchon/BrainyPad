@@ -22,12 +22,13 @@ const RecentNotes: React.FC<RecentNotesProps> = () => {
 
 const InnerRecentNotes = () => {
   const { data, isLoading } = useQuery({
+    queryKey: ["notes"],
     queryFn: () =>
       fetch("/api/notes").then((res) => res.json() as Promise<NoteSelect[]>),
-    queryKey: "notes",
   });
 
-  if (isLoading || !data) return <div className="dark:text-white ">Loading...</div>;
+  if (isLoading || !data)
+    return <div className="dark:text-white ">Loading...</div>;
 
   return data.map((note) => (
     <NotePreview
@@ -60,7 +61,7 @@ const CreateNoteButton = () => {
       className="h-72 my-2 bg-white dark:bg-card outline outline-4 outline-gray-200 dark:outline-borders flex flex-col justify-center space-x-3 items-center text-lg dark:text-white hover:scale-[1.015] transition-all ease-out duration-200"
       onClick={() => mutate()}
     >
-      <CirclePlus size={30} className="dark:stroke-white"/>
+      <CirclePlus size={30} className="dark:stroke-white" />
       {isLoading ? "Creating" : "Create"} Note
     </button>
   );
@@ -82,8 +83,10 @@ const NotePreview = ({
     <div className="h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-end hover:scale-[1.015] z-0 transition-all ease-out duration-20 my-2">
       <div className="bg-gray-400 dark:bg-card-footer h-16 w-full flex items-center justify-start px-2 text-xl font-medium outline z-20 outline-3 outline-gray-600 dark:outline-borders">
         <span className="flex w-full justify-between items-center">
-          <a className="dark:text-white" href={`/notes/${id}`}>{title}</a>
-          <GripHorizontal size={24} className="mr-2 dark:stroke-white"/>
+          <a className="dark:text-white" href={`/notes/${id}`}>
+            {title}
+          </a>
+          <GripHorizontal size={24} className="mr-2 dark:stroke-white" />
         </span>
       </div>
     </div>
