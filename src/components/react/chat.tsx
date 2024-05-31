@@ -1,13 +1,43 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
+import ReactQueryProvider, { queryClient } from "./react-query-provider";
+import { useMutation, useQuery } from "react-query";
+import type { MessageSelect } from "../../server/db/types";
 
-interface Message {
-  id: number;
-  text: string;
-  sender: string;
+interface ChatProps {
+  id: string;
+  type: "file" | "note";
 }
 
-const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+const Chat: React.FC<ChatProps> = (props) => {
+  return (
+    <ReactQueryProvider>
+      <InnerChat {...props} />
+    </ReactQueryProvider>
+  );
+};
+
+const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
+  const messagesRes = useQuery({
+    queryKey: ["messages", type, id],
+    queryFn: () =>
+      fetch(`/api/assistant/chat/${id}?type=${type}`).then(
+        (res) => res.json() as Promise<{ messages: MessageSelect[] }>
+      ),
+  });
+
+  const sendMessageMutation = useMutation({
+    mutationKey: [type, id, "send-mutation"],
+    mutationFn: async (message: string) => {
+      const res = await fetch(
+        `/api/assistant/chat/${id}?type=${type}&message=${message}`
+      );
+      return await (res.json() as Promise<{ messages: MessageSelect[] }>);
+    },
+    onMutate: () => scrollToBottom(),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ["messages", type, id] }),
+  });
+
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
@@ -15,18 +45,10 @@ const Chat: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const handleSend = () => {
-    if (input.trim()) {
-      // Checks if the input is not just whitespace
-      const newMessage = { id: messages.length, text: input, sender: "user" };
-      setMessages([...messages, newMessage]);
-      setInput("");
-    }
-  };
+  function handleSend() {
+    sendMessageMutation.mutate(input);
+    setInput("");
+  }
 
   return (
     <div
@@ -37,18 +59,30 @@ const Chat: React.FC = () => {
         className="flex-grow overflow-auto p-4"
         style={{ maxHeight: "calc(85vh - 75px)" }}
       >
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`bg-white my-2 mx-4 p-2 rounded-lg shadow max-w-lg ${
-              message.sender === "user"
-                ? "ml-auto bg-blue-100"
-                : "mr-auto bg-gray-200"
-            }`}
-          >
-            {message.text}
-          </div>
-        ))}
+        {messagesRes.isLoading || !messagesRes.data ? (
+          <>Loading...</>
+        ) : (
+          <>
+            {messagesRes.data.messages.map((message) => (
+              <div
+                key={message.id}
+                className={`my-2 mx-4 p-2 rounded-lg shadow max-w-lg ${
+                  !message.wasFromAi
+                    ? "ml-auto bg-blue-100"
+                    : "mr-auto bg-gray-200"
+                }`}
+              >
+                {message.content}
+              </div>
+            ))}
+            {sendMessageMutation.isLoading && (
+              <div className="my-2 mx-4 p-2 rounded-lg shadow max-w-lg ml-auto bg-blue-100">
+                {sendMessageMutation.variables}
+              </div>
+            )}
+          </>
+        )}
+
         <div ref={messagesEndRef} />
       </div>
       <div className="flex items-center p-2 bg-gray-100 absolute bottom-0 w-full">

@@ -42,10 +42,6 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
   const message = urlParams.get("message");
   const idType = urlParams.get("type");
 
-  if (!message) {
-    return new Response("Missing message", { status: 400 });
-  }
-
   if (!idType) {
     return new Response("Missing type. Valid values are 'file' or 'note'", {
       status: 400,
@@ -111,8 +107,15 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
   // now, we need to find all the messages in this conversation
   const convMessages = await db.query.messages.findMany({
     where: eq(messages.conversationId, conversation.id),
-    orderBy: (msgs, { desc }) => desc(msgs.createdAt),
+    orderBy: (msgs, { asc }) => asc(msgs.createdAt),
   });
+
+  if (!message) {
+    return new Response(JSON.stringify({ messages: convMessages }, null, 2), {
+      headers: { "content-type": "application/json" },
+      status: 200,
+    });
+  }
 
   if (idType === "file") {
     const context = await nearbyy.semanticSearch({
@@ -159,12 +162,7 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
       ])
       .returning();
 
-    const updatedMessages = [...newMessages, ...convMessages].sort((a, b) => {
-      const dateA = a.createdAt!.getTime();
-      const dateB = b.createdAt!.getTime();
-
-      return dateA - dateB;
-    });
+    const updatedMessages = [...convMessages, ...newMessages];
 
     return new Response(
       JSON.stringify({ messages: updatedMessages }, null, 2),
