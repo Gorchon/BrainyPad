@@ -1,4 +1,3 @@
-
 import type { Config } from "drizzle-kit";
 
 if (!process.env.DATABASE_URL) {

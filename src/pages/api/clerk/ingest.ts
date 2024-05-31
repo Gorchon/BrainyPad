@@ -37,7 +37,7 @@ async function verifyRequest<T = unknown>(req: Request, secret: string) {
   return { valid: false, data: null } as const;
 }
 
-const secret = process.env.SVIX_SECRET;
+const secret = import.meta.env.SVIX_SECRET;
 
 if (!secret) {
   throw new Error("SVIX_SECRET is missing");
