@@ -69,6 +69,86 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.conversations": {
+      "name": "conversations",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "file_id": {
+          "name": "file_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "note_id": {
+          "name": "note_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "conversations_user_id_users_id_fk": {
+          "name": "conversations_user_id_users_id_fk",
+          "tableFrom": "conversations",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "tableTo": "users",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        },
+        "conversations_file_id_files_id_fk": {
+          "name": "conversations_file_id_files_id_fk",
+          "tableFrom": "conversations",
+          "columnsFrom": [
+            "file_id"
+          ],
+          "tableTo": "files",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        },
+        "conversations_note_id_notes_id_fk": {
+          "name": "conversations_note_id_notes_id_fk",
+          "tableFrom": "conversations",
+          "columnsFrom": [
+            "note_id"
+          ],
+          "tableTo": "notes",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.files": {
       "name": "files",
       "schema": "",
@@ -132,6 +212,40 @@
           "onDelete": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.messages": {
+      "name": "messages",
+      "schema": "",
+      "columns": {
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "was_from_ai": {
+          "name": "was_from_ai",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -243,6 +357,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "5c5a5119-d43f-49af-8fe3-d7546422cb07",
-  "prevId": "4f2cd83b-1227-468f-9a52-95fe4d9ca99d"
+  "id": "7e27f8f9-ef9d-4cb7-8728-321dec459bd9",
+  "prevId": "5c5a5119-d43f-49af-8fe3-d7546422cb07"
 }
