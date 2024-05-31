@@ -1,7 +1,7 @@
 ---
 // Import your layout and the Chat component
 import Layout from "../layouts/Layout.astro";
-import Chatt from "../components/react/chat";
+import ChatComponent from "../components/react/chat";
 ---
 
 <Layout>
@@ -13,25 +13,23 @@ import Chatt from "../components/react/chat";
         class="w-14 h-14 rounded-full mr-4"
       />
       <h1 class="text-xl font-bold">Brainy AI</h1>
-      
     </div>
     <div class="flex justify-between">
       <!-- Ajustado para separar los contenidos -->
       <div class="flex flex-grow justify-evenly">
-        <Chatt client:load />
+        <ChatComponent client:load />
         <div
-        class="bg-[#e3e8ed] p-4 rounded-lg shadow-lg mr-5"
-        style={{ height: "65h", width: "70vh" }}
-      >
-        <!-- Contenedor para las fuentes referenciadas, posicionado fijo -->
-        <h2 class="font-bold text-lg mb-3">Sources Referenced</h2>
-        <ul>
-          <li>1. Familiares</li>
-          <li>2. Familiares</li>
-        </ul>
+          class="bg-[#e3e8ed] p-4 rounded-lg shadow-lg mr-5"
+          style={{ height: "65h", width: "70vh" }}
+        >
+          <!-- Contenedor para las fuentes referenciadas, posicionado fijo -->
+          <h2 class="font-bold text-lg mb-3">Sources Referenced</h2>
+          <ul>
+            <li>1. Familiares</li>
+            <li>2. Familiares</li>
+          </ul>
+        </div>
       </div>
-      </div>
-      
     </div>
   </div>
 </Layout>

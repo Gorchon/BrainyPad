@@ -3,10 +3,9 @@ import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { MessageSelect } from "../../server/db/types";
 
-interface ChatProps {
-  id: string;
-  type: "file" | "note";
-}
+type ChatProps =
+  | { id: string; type: "file" | "note" }
+  | { id?: undefined; type?: undefined };
 
 const Chat: React.FC<ChatProps> = (props) => {
   return (
@@ -19,19 +18,33 @@ const Chat: React.FC<ChatProps> = (props) => {
 const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
   const messagesRes = useQuery({
     queryKey: ["messages", type, id],
-    queryFn: () =>
-      fetch(`/api/assistant/chat/${id}?type=${type}`).then(
-        (res) => res.json() as Promise<{ messages: MessageSelect[] }>
-      ),
+    queryFn: async () => {
+      const endpoint = id
+        ? `/api/assistant/chat/${id}?type=${type}`
+        : `/api/assistant/chat`;
+
+      const response = await fetch(endpoint);
+      const data = (await response.json()) as Promise<{
+        messages: MessageSelect[];
+      }>;
+
+      return data;
+    },
   });
 
   const sendMessageMutation = useMutation({
     mutationKey: [type, id, "send-mutation"],
     mutationFn: async (message: string) => {
-      const res = await fetch(
-        `/api/assistant/chat/${id}?type=${type}&message=${message}`
-      );
-      return await (res.json() as Promise<{ messages: MessageSelect[] }>);
+      const endpoint = id
+        ? `/api/assistant/chat/${id}?type=${type}&message=${message}`
+        : `/api/assistant/chat?type=${type}&message=${message}`;
+
+      const response = await fetch(endpoint);
+      const data = (await response.json()) as Promise<{
+        messages: MessageSelect[];
+      }>;
+
+      return data;
     },
     onMutate: () => scrollToBottom(),
     onSettled: () =>
