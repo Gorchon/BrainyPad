@@ -33,7 +33,7 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
   });
 
   if (note.isLoading || !note.data || !mkeditor.data || mkeditor.isLoading) {
-    return <div>Loading...</div>;
+    return <div className="text-white">Loading...</div>;
   }
 
   return (
