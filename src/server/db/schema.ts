@@ -1,4 +1,11 @@
-import { pgTable, serial, text, varchar, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  varchar,
+  timestamp,
+  boolean,
+} from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: varchar("id").primaryKey(),
@@ -25,6 +32,24 @@ export const notes = pgTable("notes", {
   content: text("content"),
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
+});
+
+export const conversations = pgTable("conversations", {
+  id: varchar("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  fileId: varchar("file_id").references(() => files.id),
+  noteId: varchar("note_id").references(() => notes.id),
+  createdAt: timestamp("created_at"),
+  updatedAt: timestamp("updated_at"),
+});
+
+export const messages = pgTable("messages", {
+  id: varchar("id").primaryKey(),
+  content: text("content").notNull(),
+  wasFromAi: boolean("was_from_ai").notNull(),
+  createdAt: timestamp("created_at"),
+  updatedAt: timestamp("updated_at"),
+  conversationId: varchar("conversation_id").references(() => conversations.id),
 });
 
 export const attachments = pgTable("attachments", {

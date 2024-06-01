@@ -1,0 +1,1 @@
+ALTER TABLE "messages" ADD COLUMN "id" varchar NOT NULL;

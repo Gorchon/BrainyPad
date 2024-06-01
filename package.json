@@ -7,8 +7,9 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "introspect": "drizzle-kit introspect:pg",
-    "generate": "drizzle-kit generate:pg",
+    "generate": "drizzle-kit generate",
     "migrate": "tsx src/server/db/migrate.ts",
+    "studio": "drizzle-kit studio",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -31,9 +32,11 @@
     "astro": "^4.7.1",
     "astro-clerk-auth": "^0.5.0",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.30.10",
+    "drizzle-orm": "^0.31.0",
     "lucide": "^0.378.0",
     "lucide-react": "^0.377.0",
+    "openai": "^4.47.2",
+    "pg": "^8.11.5",
     "postgres": "^3.4.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -48,7 +51,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.8",
-    "drizzle-kit": "^0.20.17",
+    "drizzle-kit": "^0.22.1",
     "tsx": "^4.9.0",
     "vercel": "^34.1.7"
   }

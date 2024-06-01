@@ -15,6 +15,48 @@
       "when": 1714745726735,
       "tag": "0001_outgoing_shinko_yamashiro",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1717177504393,
+      "tag": "0002_tiresome_bushwacker",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1717178287617,
+      "tag": "0003_thick_satana",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1717183316774,
+      "tag": "0004_warm_major_mapleleaf",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1717183353067,
+      "tag": "0005_medical_blazing_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1717183371315,
+      "tag": "0006_neat_rage",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1717183700776,
+      "tag": "0007_square_apocalypse",
+      "breakpoints": true
     }
   ]
 }
