@@ -79,7 +79,7 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
             {messagesRes.data.messages.map((message) => (
               <div
                 key={message.id}
-                className={`bg-white dark:bg-message dark:text-white my-2 mx-4 p-2 rounded-lg shadow max-w-lg ${
+                className={`dark:bg-message dark:text-white my-2 mx-4 p-2 rounded-lg shadow max-w-lg ${
                   !message.wasFromAi
                     ? "ml-auto bg-blue-100"
                     : "mr-auto bg-gray-200"
@@ -95,7 +95,6 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
             )}
           </>
         )}
-
 
         <div ref={messagesEndRef} />
       </div>
