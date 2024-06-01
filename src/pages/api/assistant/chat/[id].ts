@@ -6,7 +6,6 @@ import {
   files,
   messages,
   notes,
-  users,
 } from "../../../../server/db/schema";
 import { NearbyyClient } from "@nearbyy/core";
 import { OpenAI } from "openai";
@@ -156,8 +155,8 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
           content: aiResponse,
           wasFromAi: true,
           conversationId: conversation.id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: new Date(new Date().getTime() + 100), // Add 100 ms delay
+          updatedAt: new Date(new Date().getTime() + 100), // Add 100 ms delay
         },
       ])
       .returning();

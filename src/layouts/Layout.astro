@@ -2,7 +2,7 @@
 import ReactSidebar from "../components/react/Sidebar";
 ---
 
-<style>
+<style is:global>
   .container {
     display: flex; /* Ensures the sidebar and content are side-by-side */
     min-height: 100vh; /* Full viewport height */
@@ -19,7 +19,8 @@ import ReactSidebar from "../components/react/Sidebar";
 <div class="container bg-white dark:bg-background">
   <ReactSidebar client:only="react" />
   <!-- <Sidebar client:load /> -->
-  <main class="content bg-white dark:bg-background"> <!-- layout color -->
+  <main class="content bg-white dark:bg-background">
+    <!-- layout color -->
     <slot />
     <!-- This slot will be replaced by specific page content -->
   </main>
