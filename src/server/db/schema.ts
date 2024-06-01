@@ -27,6 +27,7 @@ export const files = pgTable("files", {
 
 export const notes = pgTable("notes", {
   id: varchar("id").primaryKey(),
+  nearbyy_id: varchar("nearbyy_id"),
   userId: varchar("user_id").references(() => users.id),
   title: varchar("title", { length: 256 }),
   content: text("content"),

@@ -99,7 +99,7 @@ export default function App() {
           }}
           markdown={markdown}
           className="w-full h-full"
-          contentEditableClassName="prose h-[80vh] dark:prose-invert max-w-none dark:text-white"
+          contentEditableClassName="prose h-[90vh] dark:prose-invert max-w-none dark:text-white"
           plugins={[
             headingsPlugin(),
             listsPlugin(),
