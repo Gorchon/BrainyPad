@@ -17,12 +17,13 @@ function RecentFiles() {
 
 function InnerRecentNotes() {
   const { data, isLoading } = useQuery({
+    queryKey: ["files"],
     queryFn: () =>
       fetch("/api/files").then((res) => res.json() as Promise<FileSelect[]>),
-    queryKey: "files",
   });
 
-  if (isLoading || !data) return <div className="dark:text-white ">Loading...</div>;
+  if (isLoading || !data)
+    return <div className="dark:text-white ">Loading...</div>;
 
   return data.map((file) => (
     <FilePreview key={file.id} name={file.name ?? ""} id={file.id} />
@@ -39,13 +40,15 @@ function FilePreview({ name, id }: { name: string; id: string }) {
       className="h-72 bg-white cursor-pointer hover:scale-[1.015] my-2 transition-all ease-out duration-200"
       onClick={() => navigateTo(`/files/${id}`)}
     >
-      <div className="relative h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-center">  {/* tarjeta de archivo*/}
+      <div className="relative h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-center">
+        {" "}
+        {/* tarjeta de archivo*/}
         <div className="flex justify-center">
-          <File size={50} className="dark:stroke-white"/>
+          <File size={50} className="dark:stroke-white" />
         </div>
-        <div className=" absolute bottom-0 w-full px-4 h-16 py-2 text-xl outline outline-1 outline-gray-600 dark:outline-borders bg-gray-400 dark:bg-card-footer flex flex-row"> 
+        <div className=" absolute bottom-0 w-full px-4 h-16 py-2 text-xl outline outline-1 outline-gray-600 dark:outline-borders bg-gray-400 dark:bg-card-footer flex flex-row">
           <p className="dark:text-white">{name}</p>
-          <Trash size={32} className="dark:stroke-white"/>
+          <Trash size={32} className="dark:stroke-white" />
         </div>
       </div>
     </div>
@@ -130,8 +133,11 @@ function UploadFileButton() {
             <span className="select text-lg">Drop files here</span>
           ) : (
             <>
-              <button className="flex flex-col justify-center items-center" onClick={selectFiles}>
-                <CirclePlus size={30} className="dark:stroke-white"/>
+              <button
+                className="flex flex-col justify-center items-center"
+                onClick={selectFiles}
+              >
+                <CirclePlus size={30} className="dark:stroke-white" />
                 <p className="text-lg dark:text-white">Upload files</p>
               </button>
             </>

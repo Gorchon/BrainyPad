@@ -1,5 +1,4 @@
 import React from "react";
-import MKEditor from "./MKEditor";
 import { useQuery } from "react-query";
 import ReactQueryProvider from "./react-query-provider";
 import type { NoteSelect } from "../../server/db/types";
@@ -17,16 +16,31 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ id }) => {
 };
 
 const InnerNoteEditor = ({ id }: NoteEditorProps) => {
-  const { data, isLoading } = useQuery({
+  const note = useQuery({
+    queryKey: ["note", id],
     queryFn: () =>
       fetch(`/api/notes/${id}`).then(
         (res) => res.json() as Promise<NoteSelect>
       ),
   });
 
-  if (isLoading || !data) return <div className="dark:text-white">Loading...</div>;
+  const mkeditor = useQuery({
+    queryKey: ["mkeditor"],
+    queryFn: async () => {
+      const MKEditor = (await import("./MKEditor")).default;
+      return { MKEditor };
+    },
+  });
 
-  return <MKEditor initialMarkdown={data.content ?? ""} />;
+  if (note.isLoading || !note.data || !mkeditor.data || mkeditor.isLoading) {
+    return <div className="text-white">Loading...</div>;
+  }
+
+  return (
+    <h2>
+      <mkeditor.data.MKEditor initialMarkdown={note.data.content ?? ""} />
+    </h2>
+  );
 };
 
 export default NoteEditor;

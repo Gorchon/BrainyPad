@@ -17,6 +17,7 @@ const FilePreview: React.FC<FilePreviewProps> = (props) => {
 
 const InnerFilePreview: React.FC<FilePreviewProps> = ({ id }) => {
   const { data, isLoading } = useQuery({
+    queryKey: ["files", id],
     queryFn: () => fetch(`/api/files/${id}`).then((res) => res.json()),
   });
 
