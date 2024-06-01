@@ -8,11 +8,8 @@ const id = paramsId!;
 ---
 
 <Page title={`Note ${id}`}>
-  <div class="text-lg mb-4 dark:text-white">
-    Welcome to file {id}!
-  </div>
   <div style="display: flex; justify-content: space-evenly; width: 80vw;">
     <FilePreview client:load id={id} />
-    <Chat client:load />
+    <Chat type="file" id={id} client:load />
   </div>
 </Page>
