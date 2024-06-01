@@ -24,7 +24,7 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
       ),
   });
 
-  if (isLoading || !data) return <div>Loading...</div>;
+  if (isLoading || !data) return <div className="dark:text-white">Loading...</div>;
 
   return <MKEditor initialMarkdown={data.content ?? ""} />;
 };

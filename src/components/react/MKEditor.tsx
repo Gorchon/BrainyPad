@@ -98,8 +98,8 @@ export default function App() {
             onChange?.(newMarkdown);
           }}
           markdown={markdown}
-          className="outline-orange-400 outline w-full"
-          contentEditableClassName="prose"
+          className="outline-orange-400 outline w-full "
+          contentEditableClassName="prose dark:text-white"
           plugins={[
             headingsPlugin(),
             listsPlugin(),

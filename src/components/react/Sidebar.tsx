@@ -112,7 +112,7 @@ const handleChangeTheme = () => {
 
         <br />
 
-        <div className="px-5 py-8 border-t w-full text-xl ">
+        <div className="px-5 py-8  w-full text-xl ">
           {" "}
           <div className="flex items-center space-x-8 px-4">
             {!firstLoad && (
