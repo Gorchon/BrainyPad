@@ -37,9 +37,9 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
   }
 
   return (
-    <h2>
+    <div className="h-full w-full dark:bg-[#232329] bg-[#e5e7eb] bg-opacity-25 dark:bg-opacity-50">
       <mkeditor.data.MKEditor initialMarkdown={note.data.content ?? ""} />
-    </h2>
+    </div>
   );
 };
 

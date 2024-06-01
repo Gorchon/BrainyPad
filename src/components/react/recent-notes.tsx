@@ -80,16 +80,17 @@ const NotePreview = ({
   const contentExcerpt = useMemo(() => content.slice(0, 100), [content]);
 
   return (
-    <div className="h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-end hover:scale-[1.015] z-0 transition-all ease-out duration-20 my-2">
+    <a
+      href={`/notes/${id}`}
+      className="h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-end hover:scale-[1.015] z-0 transition-all ease-out duration-20 my-2"
+    >
       <div className="bg-gray-400 dark:bg-card-footer h-16 w-full flex items-center justify-start px-2 text-xl font-medium outline z-20 outline-3 outline-gray-600 dark:outline-borders">
         <span className="flex w-full justify-between items-center">
-          <a className="dark:text-white" href={`/notes/${id}`}>
-            {title}
-          </a>
+          <p className="dark:text-white">{title}</p>
           <GripHorizontal size={24} className="mr-2 dark:stroke-white" />
         </span>
       </div>
-    </div>
+    </a>
   );
 };
 
