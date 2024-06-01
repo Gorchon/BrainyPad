@@ -4,7 +4,7 @@ import Page from "../layouts/Page.astro";
 ---
 
 <Page title="Chat">
-  <div class="grid grid-cols-2">
+  <div>
     <div
       class="flex items-center py-6 bg-[#e3e8ed] dark:bg-card rounded-lg pl-10 mb-7"
     >
@@ -21,37 +21,19 @@ import Page from "../layouts/Page.astro";
       <div class="flex flex-grow justify-evenly">
         <ChatComponent client:load />
         <div
-          class="bg-[#e3e8ed] p-4 rounded-lg shadow-lg mr-5"
+          class="bg-[#e3e8ed] dark:bg-card p-4 rounded-lg shadow-lg mr-5"
           style={{ height: "65h", width: "70vh" }}
         >
           <!-- Contenedor para las fuentes referenciadas, posicionado fijo -->
-          <h2 class="font-bold text-lg mb-3">Sources Referenced</h2>
+          <h2 class="font-bold text-lg dark:text-white mb-3">
+            Sources Referenced
+          </h2>
           <ul>
-            <li>1. Familiares</li>
-            <li>2. Familiares</li>
+            <li class="dark:text-white">1. Familiares</li>
+            <li class="dark:text-white">2. Familiares</li>
           </ul>
-        </div>
-        <h1 class="text-xl dark:text-white font-bold">Brainy AI</h1>
-      </div>
-      <div class="flex justify-between">
-        <!-- Ajustado para separar los contenidos -->
-        <div class="flex flex-grow justify-evenly">
-          <ChatComponent client:load />
-          <div
-            class="bg-[#e3e8ed] dark:bg-card p-4 rounded-lg shadow-lg mr-5"
-            style={{ height: "65h", width: "70vh" }}
-          >
-            <!-- Contenedor para las fuentes referenciadas, posicionado fijo -->
-            <h2 class="font-bold text-lg dark:text-white mb-3">
-              Sources Referenced
-            </h2>
-            <ul>
-              <li class="dark:text-white">1. Familiares</li>
-              <li class="dark:text-white">2. Familiares</li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
-  </div></Page
->
+  </div>
+</Page>

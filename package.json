@@ -54,6 +54,5 @@
     "drizzle-kit": "^0.22.1",
     "tsx": "^4.9.0",
     "vercel": "^34.1.7"
-  },
-  "packageManager": "pnpm@9.1.2+sha1.907f57a52517de34399d66401bf220a549e47b57"
+  }
 }
