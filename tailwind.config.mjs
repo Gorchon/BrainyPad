@@ -13,6 +13,15 @@ export default {
         'sidebar' : '#232329',
         'chat' : '#3E3B47',
         'message' : '#2D2A35',
+        '.toggle__dot': {
+          'top': '-1px',
+          'left': '-1px',
+          'transition': 'all 0.3s ease-in-out',
+        },
+        '.toggle__line':{
+          'transition': 'background 0.3s ease-in-out',
+        }
+        
       },
     },
   },
