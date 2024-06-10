@@ -1,11 +1,17 @@
 ---
 import Page from "../../layouts/Page.astro";
 import NoteEditor from "../../components/react/note-editor";
+import db from "../../server/db/db";
+import { eq } from "drizzle-orm";
+import { notes } from "../../server/db/schema";
 
 const { id: paramsId } = Astro.params;
 const id = paramsId!;
----
 
-<Page title={`Note ${id}`}>
+const note = await db.select().from(notes).where(eq(notes.id, id));
+const title = note[0].title;
+
+---
+<Page title={`${title}`}>
   <NoteEditor client:load id={id} />
 </Page>

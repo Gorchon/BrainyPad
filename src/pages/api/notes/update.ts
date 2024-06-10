@@ -4,7 +4,6 @@ import { notes } from "../../../server/db/schema";
 import { z } from "astro/zod";
 import { eq } from "drizzle-orm";
 import { NearbyyClient } from "@nearbyy/core";
-import { error } from "console";
 
 const nearbyy_key = import.meta.env.NEARBYY_API_KEY;
 

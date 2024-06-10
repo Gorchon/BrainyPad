@@ -81,7 +81,7 @@ const NotePreview = ({
 
   return (
     <a
-      href={`/notes/${id}`}
+      href={`/notes/${id}?title=${title}`}
       className="h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-end hover:scale-[1.015] z-0 transition-all ease-out duration-20 my-2"
     >
       <div className="bg-gray-400 dark:bg-card-footer h-16 w-full flex items-center justify-start px-2 text-xl font-medium outline z-20 outline-3 outline-gray-600 dark:outline-borders">

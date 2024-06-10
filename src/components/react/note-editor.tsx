@@ -87,7 +87,12 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
 
   return (
     <div className="h-full w-full dark:bg-[#232329] bg-[#e5e7eb] bg-opacity-25 dark:bg-opacity-50">
-      <mkeditor.data.MKEditor content={content} setContent={setContent} />
+      <mkeditor.data.MKEditor
+        content={content}
+        setContent={setContent}
+        loading={updateMutation.isLoading}
+        onSave={async () => updateMutation.mutate()}
+      />
     </div>
   );
 };

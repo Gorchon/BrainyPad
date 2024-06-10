@@ -27,7 +27,13 @@ import {
   toolbarPlugin,
   UndoRedo,
   type SandpackConfig,
+  Button,
 } from "@mdxeditor/editor";
+import {
+  Home,
+  Loader,
+  Save,
+} from "lucide-react";
 import { headingsPlugin } from "@mdxeditor/editor";
 
 import "@mdxeditor/editor/style.css";
@@ -37,12 +43,40 @@ interface MKEditorProps {
   content: string;
   setContent: (content: string) => void;
   onChange?: (markdown: string) => void;
+  loading: boolean;
+  onSave: () => void;
+}
+
+type SaveButtonProps = {
+  loading: boolean;
+  onSave: () => void;
+}
+
+function SaveButton({
+  loading,
+  onSave,
+}: SaveButtonProps) {
+  return (
+    <Button
+      onClick={() => {
+        onSave();
+      }}
+    >
+      {loading ? (
+        <Loader className="stroke-[2.5px] motion-safe:animate-spin" />
+      ) : (
+        <Save size={20} className="stroke-[2.5px]" />
+      )}
+    </Button>
+  );
 }
 
 export default function MKEditor({
   content,
   setContent,
   onChange,
+  loading,
+  onSave,
 }: MKEditorProps) {
   const [isFirstRender, setIsFirstRender] = useState(true);
 
@@ -139,6 +173,7 @@ export default function App() {
                   />
                   <ListsToggle />
                   <InsertTable />
+                  <SaveButton loading={loading} onSave={onSave} />
                 </>
               ),
             }),
