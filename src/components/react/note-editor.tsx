@@ -44,6 +44,18 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: () => {
+      return fetch(`/api/notes/delete`, {
+        method: "DELETE",
+        body: JSON.stringify({ id } as { id: string }),
+      });
+    },
+    onSuccess: () => {
+      window.location.href = "/";
+    }
+  })
+
   //Set the note content when the note is loaded
   useEffect(() => {
     if (content !== note.data?.content) {
@@ -92,6 +104,8 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
         setContent={setContent}
         loading={updateMutation.isLoading}
         onSave={async () => updateMutation.mutate()}
+        delLoading={deleteMutation.isLoading}
+        onDelete={async () => deleteMutation.mutate()}
       />
     </div>
   );

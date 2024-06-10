@@ -33,6 +33,7 @@ import {
   Home,
   Loader,
   Save,
+  Trash2,
 } from "lucide-react";
 import { headingsPlugin } from "@mdxeditor/editor";
 
@@ -45,16 +46,18 @@ interface MKEditorProps {
   onChange?: (markdown: string) => void;
   loading: boolean;
   onSave: () => void;
+  delLoading: boolean;
+  onDelete: () => void;
 }
 
 type SaveButtonProps = {
   loading: boolean;
-  onSave: () => void;
+  onClick: () => void;
 }
 
 function SaveButton({
   loading,
-  onSave,
+  onClick: onSave,
 }: SaveButtonProps) {
   return (
     <Button
@@ -71,12 +74,30 @@ function SaveButton({
   );
 }
 
+function DeleteButton({ loading, onClick: onSave }: SaveButtonProps) {
+  return (
+    <Button
+      onClick={() => {
+        onSave();
+      }}
+    >
+      {loading ? (
+        <Loader className="stroke-[2.5px] motion-safe:animate-spin" />
+      ) : (
+        <Trash2 size={20} className="stroke-[2.5px]" />
+      )}
+    </Button>
+  );
+}
+
 export default function MKEditor({
   content,
   setContent,
   onChange,
   loading,
   onSave,
+  delLoading,
+  onDelete,
 }: MKEditorProps) {
   const [isFirstRender, setIsFirstRender] = useState(true);
 
@@ -173,7 +194,8 @@ export default function App() {
                   />
                   <ListsToggle />
                   <InsertTable />
-                  <SaveButton loading={loading} onSave={onSave} />
+                  <SaveButton loading={loading} onClick={onSave} />
+                  <DeleteButton loading={delLoading} onClick={onDelete} />
                 </>
               ),
             }),
