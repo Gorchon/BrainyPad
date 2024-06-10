@@ -133,8 +133,8 @@ export default function App() {
             onChange?.(newMarkdown);
           }}
           markdown={content}
-          className="w-full h-full"
-          contentEditableClassName="prose h-[90vh] dark:prose-invert max-w-none dark:text-white"
+          className="outline-orange-400 outline w-full "
+          contentEditableClassName="prose dark:text-white"
           plugins={[
             headingsPlugin(),
             listsPlugin(),

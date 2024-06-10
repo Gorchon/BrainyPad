@@ -1,9 +1,13 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body> </body>
-</html>
+---
+import SearchComponent from "../components/react/search";
+import Page from "../layouts/Page.astro";
+---
+
+<Page title="Search">
+  <div class="flex flex-col space-y-4">
+    <h2 class="text-2xl font-semibold">Search</h2>
+    <div>
+      <SearchComponent client:load />
+    </div>
+  </div>
+</Page>

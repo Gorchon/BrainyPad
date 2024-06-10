@@ -3,10 +3,9 @@ import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { MessageSelect } from "../../server/db/types";
 
-interface ChatProps {
-  id: string;
-  type: "file" | "note";
-}
+type ChatProps =
+  | { id: string; type: "file" | "note" }
+  | { id?: undefined; type?: undefined };
 
 const Chat: React.FC<ChatProps> = (props) => {
   return (
@@ -19,19 +18,33 @@ const Chat: React.FC<ChatProps> = (props) => {
 const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
   const messagesRes = useQuery({
     queryKey: ["messages", type, id],
-    queryFn: () =>
-      fetch(`/api/assistant/chat/${id}?type=${type}`).then(
-        (res) => res.json() as Promise<{ messages: MessageSelect[] }>
-      ),
+    queryFn: async () => {
+      const endpoint = id
+        ? `/api/assistant/chat/${id}?type=${type}`
+        : `/api/assistant/chat`;
+
+      const response = await fetch(endpoint);
+      const data = (await response.json()) as Promise<{
+        messages: MessageSelect[];
+      }>;
+
+      return data;
+    },
   });
 
   const sendMessageMutation = useMutation({
     mutationKey: [type, id, "send-mutation"],
     mutationFn: async (message: string) => {
-      const res = await fetch(
-        `/api/assistant/chat/${id}?type=${type}&message=${message}`
-      );
-      return await (res.json() as Promise<{ messages: MessageSelect[] }>);
+      const endpoint = id
+        ? `/api/assistant/chat/${id}?type=${type}&message=${message}`
+        : `/api/assistant/chat?type=${type}&message=${message}`;
+
+      const response = await fetch(endpoint);
+      const data = (await response.json()) as Promise<{
+        messages: MessageSelect[];
+      }>;
+
+      return data;
     },
     onMutate: () => scrollToBottom(),
     onSettled: () =>
@@ -52,7 +65,7 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
 
   return (
     <div
-      className="flex flex-col h-screen bg-[#e3e8ed] rounded-lg shadow relative w-1/2"
+      className="flex flex-col h-screen bg-[#e3e8ed] rounded-lg shadow relative w-1/2 dark:bg-chat"
       style={{ height: "85vh" }}
     >
       <div
@@ -66,7 +79,7 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
             {messagesRes.data.messages.map((message) => (
               <div
                 key={message.id}
-                className={`my-2 mx-4 p-2 rounded-lg shadow max-w-lg ${
+                className={`dark:bg-message dark:text-white my-2 mx-4 p-2 rounded-lg shadow max-w-lg ${
                   !message.wasFromAi
                     ? "ml-auto bg-blue-100"
                     : "mr-auto bg-gray-200"
@@ -76,7 +89,7 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
               </div>
             ))}
             {sendMessageMutation.isLoading && (
-              <div className="my-2 mx-4 p-2 rounded-lg shadow max-w-lg ml-auto bg-blue-100">
+              <div className="my-2 mx-4 p-2 rounded-lg shadow max-w-lg ml-auto bg-blue-100 dark:bg-message dark:text-white">
                 {sendMessageMutation.variables}
               </div>
             )}
@@ -85,16 +98,16 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
 
         <div ref={messagesEndRef} />
       </div>
-      <div className="flex items-center p-2 bg-gray-100 absolute bottom-0 w-full">
+      <div className="flex items-center p-2 bg-gray-100 absolute bottom-0 w-full dark:bg-borders">
         <input
-          className="flex-grow p-2 border-2 border-r-0 border-gray-300 rounded-l-lg focus:outline-none"
+          className="flex-grow p-2 border-2 border-r-0 border-gray-300 rounded-l-lg focus:outline-none dark:bg-card dark:text-white dark:border-gray-500"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           placeholder="Write your message"
         />
         <button
-          className="bg-gray-600 hover:bg-blue-700 text-white px-7 py-2 rounded-r-lg focus:outline-none border-2 border-gray-300"
+          className="bg-gray-600 hover:bg-blue-700 text-white px-7 py-2 rounded-r-lg focus:outline-none border-2 border-gray-300 dark dark:bg-sidebar dark:border-gray-500 dark:hover:bg-blue-500 dark:text-white"
           onClick={handleSend}
         >
           Send
