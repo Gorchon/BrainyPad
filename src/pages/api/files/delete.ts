@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import db from "../../../server/db/db";
-import { conversations, files } from "../../../server/db/schema";
+import { conversations, files, messages } from "../../../server/db/schema";
 import { z } from "astro/zod";
 import { eq } from "drizzle-orm";
 import { NearbyyClient } from "@nearbyy/core";
@@ -56,6 +56,18 @@ export const DELETE: APIRoute = async ({ locals, request }) => {
       } catch (error) {
         console.error("Error deleting file:", error);
       }
+    }
+
+    let conversationIds = await db
+      .select({ id: conversations.id })
+      .from(conversations)
+      .where(eq(conversations.fileId, id));
+
+    // Delete messages that reference the conversation
+    for (let conversationId of conversationIds) {
+      await db
+        .delete(messages)
+        .where(eq(messages.conversationId, conversationId.id));
     }
 
     // Delete referencing conversations first
