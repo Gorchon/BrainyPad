@@ -48,7 +48,7 @@ const Sidebar = () => {
         className="flex flex-col w-80 sticky top-0 bg-gray-200 dark:bg-sidebar shadow-md overflow-hidden z-10"
         style={{ height: "100vh" }}
       >
-        <div className="p-5 font-bold text-5xl dark:text-white">BrainyPad</div>
+        <a href="/" className="p-5 font-bold text-5xl dark:text-white">BrainyPad</a>
         <ul className="flex-grow overflow-auto space-y-8 p-8 text-xl">
           {" "}
           <li>

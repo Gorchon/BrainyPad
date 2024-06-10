@@ -17,6 +17,7 @@ export const users = pgTable("users", {
 
 export const files = pgTable("files", {
   id: varchar("id", { length: 256 }).primaryKey(),
+  nearbyy_id: varchar("nearbyy_id"),
   userId: varchar("user_id").references(() => users.id),
   name: text("name"),
   type: varchar("type", { length: 256 }),
@@ -27,6 +28,7 @@ export const files = pgTable("files", {
 
 export const notes = pgTable("notes", {
   id: varchar("id").primaryKey(),
+  nearbyy_id: varchar("nearbyy_id"),
   userId: varchar("user_id").references(() => users.id),
   title: varchar("title", { length: 256 }),
   content: text("content"),

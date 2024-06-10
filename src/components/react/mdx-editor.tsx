@@ -27,80 +27,24 @@ import {
   toolbarPlugin,
   UndoRedo,
   type SandpackConfig,
-  Button,
 } from "@mdxeditor/editor";
-import {
-  Home,
-  Loader,
-  Save,
-  Trash2,
-} from "lucide-react";
 import { headingsPlugin } from "@mdxeditor/editor";
 
 import "@mdxeditor/editor/style.css";
 import { useEffect, useState } from "react";
 
 interface MKEditorProps {
-  content: string;
-  setContent: (content: string) => void;
+  markdown: string;
+  setMarkdown: (markdown: string) => void;
   onChange?: (markdown: string) => void;
-  loading: boolean;
-  onSave: () => void;
-  delLoading: boolean;
-  onDelete: () => void;
 }
 
-type SaveButtonProps = {
-  loading: boolean;
-  onClick: () => void;
-}
-
-function SaveButton({
-  loading,
-  onClick: onSave,
-}: SaveButtonProps) {
-  return (
-    <Button
-      onClick={() => {
-        onSave();
-      }}
-    >
-      {loading ? (
-        <Loader className="stroke-[2.5px] motion-safe:animate-spin" />
-      ) : (
-        <Save size={20} className="stroke-[2.5px]" />
-      )}
-    </Button>
-  );
-}
-
-function DeleteButton({ loading, onClick: onSave }: SaveButtonProps) {
-  return (
-    <Button
-      onClick={() => {
-        onSave();
-      }}
-    >
-      {loading ? (
-        <Loader className="stroke-[2.5px] motion-safe:animate-spin" />
-      ) : (
-        <Trash2 size={20} className="stroke-[2.5px]" />
-      )}
-    </Button>
-  );
-}
-
-export default function MKEditor({
-  content,
-  setContent,
+export default function MdxEditor({
+  markdown,
+  setMarkdown,
   onChange,
-  loading,
-  onSave,
-  delLoading,
-  onDelete,
 }: MKEditorProps) {
   const [isFirstRender, setIsFirstRender] = useState(true);
-
   useEffect(() => {
     setIsFirstRender(false);
   }, []);
@@ -150,12 +94,12 @@ export default function App() {
       {!isFirstRender && (
         <MDXEditor
           onChange={(newMarkdown) => {
-            setContent(newMarkdown);
+            setMarkdown(newMarkdown);
             onChange?.(newMarkdown);
           }}
-          markdown={content}
-          className="w-full "
-          contentEditableClassName="prose dark:text-white dark:prose-invert max-w-none h-[90vh]"
+          markdown={markdown}
+          className="w-full h-full"
+          contentEditableClassName="prose h-[90vh] dark:prose-invert max-w-none dark:text-white"
           plugins={[
             headingsPlugin(),
             listsPlugin(),
@@ -194,8 +138,6 @@ export default function App() {
                   />
                   <ListsToggle />
                   <InsertTable />
-                  <SaveButton loading={loading} onClick={onSave} />
-                  <DeleteButton loading={delLoading} onClick={onDelete} />
                 </>
               ),
             }),
