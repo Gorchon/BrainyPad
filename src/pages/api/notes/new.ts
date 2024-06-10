@@ -22,7 +22,7 @@ export const POST: APIRoute = async ({ locals, request }) => {
   await db.insert(notes).values({
     id: crypto.randomUUID(),
     nearbyy_id: "",
-    content: "",
+    content: validatedBody.data.name,
     createdAt: new Date(),
     updatedAt: new Date(),
     userId: currentUser.id,

@@ -34,18 +34,17 @@ import "@mdxeditor/editor/style.css";
 import { useEffect, useState } from "react";
 
 interface MKEditorProps {
-  content: string;
-  setContent: (content: string) => void;
+  markdown: string;
+  setMarkdown: (markdown: string) => void;
   onChange?: (markdown: string) => void;
 }
 
-export default function MKEditor({
-  content,
-  setContent,
+export default function MdxEditor({
+  markdown,
+  setMarkdown,
   onChange,
 }: MKEditorProps) {
   const [isFirstRender, setIsFirstRender] = useState(true);
-
   useEffect(() => {
     setIsFirstRender(false);
   }, []);
@@ -95,10 +94,10 @@ export default function App() {
       {!isFirstRender && (
         <MDXEditor
           onChange={(newMarkdown) => {
-            setContent(newMarkdown);
+            setMarkdown(newMarkdown);
             onChange?.(newMarkdown);
           }}
-          markdown={content}
+          markdown={markdown}
           className="w-full h-full"
           contentEditableClassName="prose h-[90vh] dark:prose-invert max-w-none dark:text-white"
           plugins={[
