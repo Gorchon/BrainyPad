@@ -155,7 +155,7 @@ export default function App() {
           }}
           markdown={content}
           className="w-full "
-          contentEditableClassName="prose dark:text-white"
+          contentEditableClassName="prose dark:text-white dark:prose-invert max-w-none h-[90vh]"
           plugins={[
             headingsPlugin(),
             listsPlugin(),
