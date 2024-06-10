@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import db from "../../../../server/db/db";
-import { and, eq, or } from "drizzle-orm";
+import { and, eq, isNull, or } from "drizzle-orm";
 import {
   conversations,
   files,
@@ -41,17 +41,23 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
   const message = urlParams.get("message");
   const idType = urlParams.get("type");
 
-  if (!idType) {
+  if (!idType && id !== "all") {
     return new Response("Missing type. Valid values are 'file' or 'note'", {
       status: 400,
     });
   }
 
   let conversation = await db.query.conversations.findFirst({
-    where: and(
-      eq(conversations.userId, currentUser.id),
-      or(eq(conversations.fileId, id), eq(conversations.noteId, id))
-    ),
+    where:
+      id !== "all"
+        ? and(
+            eq(conversations.userId, currentUser.id),
+            or(eq(conversations.fileId, id), eq(conversations.noteId, id))
+          )
+        : and(
+            eq(conversations.userId, currentUser.id),
+            and(isNull(conversations.fileId), isNull(conversations.noteId))
+          ),
   });
 
   if (!conversation) {
@@ -98,6 +104,20 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
       // create the conversation
       await db.insert(conversations).values(conversation);
     }
+
+    if (id === "all") {
+      conversation = {
+        id: crypto.randomUUID(),
+        userId: currentUser.id,
+        fileId: null,
+        updatedAt: new Date(),
+        createdAt: new Date(),
+        noteId: null,
+      };
+
+      // create the conversation
+      await db.insert(conversations).values(conversation);
+    }
   }
 
   // This just tells ts that this will be defined
@@ -116,12 +136,15 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
     });
   }
 
-  if (idType === "file") {
-    const context = await nearbyy.semanticSearch({
-      limit: 10,
-      query: message,
-      fileId: id,
-    });
+  if (idType === "file" || id === "all") {
+    const context =
+      id === "all"
+        ? await nearbyy.semanticSearch({ limit: 10, query: message })
+        : await nearbyy.semanticSearch({
+            limit: 10,
+            query: message,
+            fileId: id,
+          });
 
     if (!context.success)
       return new Response("Failed to get context", { status: 500 });
@@ -163,8 +186,12 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
 
     const updatedMessages = [...convMessages, ...newMessages];
 
+    const referencedFiles = context.data.items.map((item) => ({
+      id: item._extras.fileId,
+    }));
+
     return new Response(
-      JSON.stringify({ messages: updatedMessages }, null, 2),
+      JSON.stringify({ messages: updatedMessages, referencedFiles }, null, 2),
       {
         headers: { "content-type": "application/json" },
         status: 200,

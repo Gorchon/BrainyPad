@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { MessageSelect } from "../../server/db/types";
+import { Loader, Trash2 } from "lucide-react";
 
 type ChatProps =
   | { id: string; type: "file" | "note" }
@@ -21,7 +22,7 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
     queryFn: async () => {
       const endpoint = id
         ? `/api/assistant/chat/${id}?type=${type}`
-        : `/api/assistant/chat`;
+        : `/api/assistant/chat/all`;
 
       const response = await fetch(endpoint);
       const data = (await response.json()) as Promise<{
@@ -37,7 +38,7 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
     mutationFn: async (message: string) => {
       const endpoint = id
         ? `/api/assistant/chat/${id}?type=${type}&message=${message}`
-        : `/api/assistant/chat?type=${type}&message=${message}`;
+        : `/api/assistant/chat/all?type=${type}&message=${message}`;
 
       const response = await fetch(endpoint);
       const data = (await response.json()) as Promise<{
@@ -49,6 +50,26 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
     onMutate: () => scrollToBottom(),
     onSettled: () =>
       queryClient.invalidateQueries({ queryKey: ["messages", type, id] }),
+  });
+
+  const deleteConversationMutation = useMutation({
+    mutationKey: [id, "delete-conversation-mutation"],
+    mutationFn: async (id: string) => {
+      const endpoint = `/api/conversations/delete`;
+
+      const response = await fetch(endpoint, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+      const data = await response.json();
+      console.log(data);
+    },
+    onSuccess: () => {
+      messagesRes.refetch();
+    },
   });
 
   const [input, setInput] = useState("");
@@ -112,6 +133,19 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
         >
           Send
         </button>
+        {deleteConversationMutation.isLoading ? (
+          <Loader size={30} className="stroke-2 motion-safe:animate-spin" />
+        ) : (
+          <Trash2
+            onClick={() =>
+              deleteConversationMutation.mutate(
+                messagesRes.data?.messages[0].conversationId ?? ""
+              )
+            }
+            size={30}
+            className="cursor-pointer stroke-2"
+          />
+        )}
       </div>
     </div>
   );
