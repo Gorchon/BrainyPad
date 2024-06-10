@@ -13,7 +13,7 @@ const title = note[0].title;
 
 ---
 <Page title={`${title}`}>
-  <div class="dark:text-white text-2xl">
+  <div class="dark:text-white text-2xl font-semibold tracking-wide mb-2">
     {title}
   </div>
   <NoteEditor client:load id={id} />

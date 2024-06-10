@@ -133,7 +133,7 @@ export default function App() {
             onChange?.(newMarkdown);
           }}
           markdown={content}
-          className="outline-orange-400 outline w-full "
+          className="w-full "
           contentEditableClassName="prose dark:text-white"
           plugins={[
             headingsPlugin(),
