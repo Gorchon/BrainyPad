@@ -30,6 +30,12 @@ const openai = new OpenAI({
   apiKey: open_ai_key as string,
 });
 
+export interface FileReference {
+  title: string;
+  id: string;
+  refCount: number;
+}
+
 export const GET: APIRoute = async ({ locals, request, params }) => {
   const currentUser = await locals.currentUser();
   if (!currentUser) return new Response("Unauthorized", { status: 401 });
@@ -130,16 +136,30 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
   });
 
   if (!message) {
-    return new Response(JSON.stringify({ messages: convMessages }, null, 2), {
-      headers: { "content-type": "application/json" },
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify(
+        {
+          messages: convMessages,
+          referencedFiles: [] as FileReference[],
+        },
+        null,
+        2
+      ),
+      {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      }
+    );
   }
 
   if (idType === "file" || id === "all") {
     const context =
       id === "all"
-        ? await nearbyy.semanticSearch({ limit: 10, query: message })
+        ? await nearbyy.semanticSearch({
+            limit: 10,
+            query: message,
+            tag: currentUser.id,
+          })
         : await nearbyy.semanticSearch({
             limit: 10,
             query: message,
@@ -161,6 +181,42 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
         role: msg.wasFromAi ? "assistant" : "user",
       }))
     );
+
+    let referencedFiles: FileReference[] = [];
+
+    if (context.data.items && context.data.items.length > 0) {
+      console.log(context.data.items);
+
+      // Create a map to count the occurrences of each fileId
+      const fileIdCounts = context.data.items.reduce(
+        (acc: { [key: string]: number }, item) => {
+          acc[item._extras.fileId] = (acc[item._extras.fileId] || 0) + 1;
+          return acc;
+        },
+        {}
+      );
+
+      // Get unique fileIds
+      const uniqueFileIds = Object.keys(fileIdCounts);
+
+      // Fetch files from the database for each unique fileId
+      const filePromises = uniqueFileIds.map(async (fileId) => {
+        const file = await db
+          .select({ name: files.name })
+          .from(files)
+          .where(eq(files.id, fileId));
+
+        const { name } = file[0];
+
+        return {
+          title: name ?? "",
+          id: fileId,
+          refCount: fileIdCounts[fileId],
+        };
+      });
+
+      referencedFiles = await Promise.all(filePromises);
+    }
 
     const newMessages = await db
       .insert(messages)
@@ -186,12 +242,12 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
 
     const updatedMessages = [...convMessages, ...newMessages];
 
-    const referencedFiles = context.data.items.map((item) => ({
-      id: item._extras.fileId,
-    }));
-
     return new Response(
-      JSON.stringify({ messages: updatedMessages, referencedFiles }, null, 2),
+      JSON.stringify(
+        { messages: updatedMessages, referencedFiles: referencedFiles },
+        null,
+        2
+      ),
       {
         headers: { "content-type": "application/json" },
         status: 200,
