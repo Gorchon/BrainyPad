@@ -3,7 +3,7 @@ import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { NoteSelect } from "../../server/db/types";
 import type { NewNoteBody } from "../../pages/api/notes/new";
-import { CirclePlus, GripHorizontal } from "lucide-react";
+import { CirclePlus, GripHorizontal, Loader, Trash2 } from "lucide-react";
 
 interface RecentNotesProps {
   children?: React.ReactNode;
@@ -21,7 +21,7 @@ const RecentNotes: React.FC<RecentNotesProps> = () => {
 };
 
 const InnerRecentNotes = () => {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["notes"],
     queryFn: () =>
       fetch("/api/notes").then((res) => res.json() as Promise<NoteSelect[]>),
@@ -36,6 +36,7 @@ const InnerRecentNotes = () => {
       content={note.content ?? ""}
       id={note.id}
       title={note.title ?? ""}
+      refetch={refetch}
     />
   ));
 };
@@ -71,23 +72,63 @@ const NotePreview = ({
   title,
   content,
   id,
+  refetch,
 }: {
   title: string;
   content: string;
   id: string;
+  refetch: () => void;
 }) => {
   // get first 100 characters of content
   const contentExcerpt = useMemo(() => content.slice(0, 100), [content]);
 
+  const deleteMutation = useMutation({
+    mutationFn: () => {
+      return fetch(`/api/file/delete`, {
+        method: "DELETE",
+        body: JSON.stringify({ id } as { id: string }),
+      });
+    },
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
   return (
     <a
       href={`/notes/${id}?title=${title}`}
+      onClick={(event) => {
+        // Ensure event.target is an Element
+        const target = event.target as Element;
+        if (target.closest(".delete-button")) {
+          event.preventDefault();
+        }
+      }}
       className="h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-end hover:scale-[1.015] z-0 transition-all ease-out duration-20 my-2"
     >
       <div className="bg-gray-400 dark:bg-card-footer h-16 w-full flex items-center justify-start px-2 text-xl font-medium outline z-20 outline-3 outline-gray-600 dark:outline-borders">
         <span className="flex w-full justify-between items-center">
           <p className="dark:text-white">{title}</p>
-          <GripHorizontal size={24} className="mr-2 dark:stroke-white" />
+          {deleteMutation.isLoading ? (
+            <Loader
+              size={24}
+              className="mr-2 dark:stroke-white motion-safe:animate-spin"
+            />
+          ) : (
+            <div
+              className="delete-button"
+              onClick={(event) => {
+                event.stopPropagation();
+                event.preventDefault(); // Prevent default anchor behavior
+                deleteMutation.mutate();
+              }}
+            >
+              <Trash2
+                size={24}
+                className="mr-2 dark:stroke-white hover:cursor-pointer"
+              />
+            </div>
+          )}
         </span>
       </div>
     </a>

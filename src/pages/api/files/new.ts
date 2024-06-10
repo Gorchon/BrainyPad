@@ -37,6 +37,7 @@ export const POST: APIRoute = async ({ locals, request }) => {
   const promises = res.data.files.map((file) => {
     return db.insert(files).values({
       id: file.id,
+      nearbyy_id: "",
       name: fileValue.name,
       userId: currentUser.id,
       updatedAt: new Date(),

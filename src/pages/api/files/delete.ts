@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import db from "../../../server/db/db";
-import { notes } from "../../../server/db/schema";
+import { conversations, files } from "../../../server/db/schema";
 import { z } from "astro/zod";
 import { eq } from "drizzle-orm";
 import { NearbyyClient } from "@nearbyy/core";
@@ -33,11 +33,11 @@ export const DELETE: APIRoute = async ({ locals, request }) => {
 
     const { id } = validatedBody.data;
 
-    const note = await db.select().from(notes).where(eq(notes.id, id));
+    const file = await db.select().from(files).where(eq(files.id, id));
 
     let nearbyyId;
-    if (note && note.length) {
-      nearbyyId = note[0].nearbyy_id;
+    if (file && file.length) {
+      nearbyyId = file[0].nearbyy_id;
     } else {
       return new Response("Note not found in databse", { status: 404 });
     }
@@ -58,11 +58,25 @@ export const DELETE: APIRoute = async ({ locals, request }) => {
       }
     }
 
-    //Delete from local db
-    const deleteResult = await db.delete(notes).where(eq(notes.id, id));
+    // Delete referencing conversations first
+    const deleteConversationsResult = await db
+      .delete(conversations)
+      .where(eq(conversations.fileId, id));
+
+    if (!deleteConversationsResult) {
+      return new Response(
+        "Failed to delete referencing conversations from database",
+        {
+          status: 500,
+        }
+      );
+    }
+
+    // Then delete the file
+    const deleteResult = await db.delete(files).where(eq(files.id, id));
 
     if (!deleteResult) {
-      return new Response("Failed to delete note from database", {
+      return new Response("Failed to delete file from database", {
         status: 500,
       });
     }
