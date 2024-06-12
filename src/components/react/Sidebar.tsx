@@ -54,37 +54,37 @@ const Sidebar = () => {
           <li>
             <a
               href="/"
-              className="flex items-center space-x-3 text-gray-700 hover:text-blue-500" // Aumentado espacio
+              className="flex items-center space-x-3 text-gray-700 hover:text-blue-500 dark:hover:text-white dark:text-[#C0C0C0]" // Aumentado espacio
             >
-              <Home size={24} className="dark:stroke-white" />
-              <span className="dark:text-white">Home</span>
+              <Home size={24} />
+              <span>Home</span>
             </a>
           </li>
           <li>
             <a
               href="/search"
-              className="flex items-center space-x-3 text-gray-700 hover:text-blue-500"
+              className="flex items-center space-x-3 text-gray-700 hover:text-blue-500 dark:hover:text-white dark:text-[#C0C0C0] "
             >
-              <Search size={24} className="dark:stroke-white" />
-              <span className="dark:text-white">Search</span>
+              <Search size={24}/>
+              <span>Search</span>
             </a>
           </li>
           <li>
             <a
               href="/chat"
-              className="flex items-center space-x-3 text-gray-700 hover:text-blue-500"
+              className="flex items-center space-x-3 text-gray-700 hover:text-blue-500 dark:hover:text-white dark:text-[#C0C0C0] "
             >
-              <MessageCircleMore size={24} className="dark:stroke-white" />
-              <span className="dark:text-white">Chat</span>
+              <MessageCircleMore size={24}/>
+              <span>Chat</span>
             </a>
           </li>
           <li>
             <a
               href="/files"
-              className="flex items-center space-x-3 text-gray-700 hover:text-blue-500"
+              className="flex items-center space-x-3 text-gray-700 hover:text-blue-500 dark:hover:text-white dark:text-[#C0C0C0] "
             >
-              <Folders size={24} className="dark:stroke-white" />
-              <span className="dark:text-white">Files</span>
+              <Folders size={24}/>
+              <span>Files</span>
             </a>
           </li>
         </ul>
@@ -95,7 +95,7 @@ const Sidebar = () => {
         >
           <div
             id="switch-toggle"
-            className={`w-8 h-8 relative rounded-full transition duration-500 transform p-1 text-white ${
+            className={`w-8 h-8 relative rounded-full transition duration-500 dark:hover:text-white dark:text-[#C0C0C0]  transform p-1 text-white ${
               isDarkmode
                 ? "bg-gray-700 translate-x-full"
                 : "bg-borders -translate-x-2"
