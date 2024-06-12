@@ -92,17 +92,19 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
 
   const firstTen = topMatches.data.items.slice(0, 10);
   const contextMsg = firstTen
-    .map((chunk) => `chunk_id: ${chunk.chunkId}\nchunk_text: ${chunk.text}`)
+    .map(
+      (chunk) => `file_id: ${chunk._extras.fileId}\nchunk_text: ${chunk.text}`
+    )
     .join("---\n\n");
 
-  const aiResponse = await makeAIResponse(query, contextMsg);
+  const { fileId, response } = await makeAIResponse(query, contextMsg);
 
   return new Response(
     JSON.stringify(
       {
         aiOverview: {
-          response: aiResponse,
-          fileId: firstTen[0]._extras.fileId,
+          response: response,
+          fileId: fileId,
         },
         topMatches: fileIdAndTopChunk,
       },
@@ -117,7 +119,8 @@ async function makeAIResponse(query: string, context: string) {
   the questions they have using information in the database. You
   will be given a question and provide a very brief, and concise 
   answer that inmediately addresses the user's query, using only
-  the information the system will provide as context.`;
+  the information the system will provide as context. Respond with
+  the following json format: { "response": "your response here", "fileId": "the-file-id-of-your-source" }`;
 
   const messages: OpenAI.ChatCompletionMessageParam[] = [
     { role: "system", content: prompt },
@@ -130,5 +133,6 @@ async function makeAIResponse(query: string, context: string) {
     messages,
   });
 
-  return response.choices[0].message.content ?? "";
+  const maybeJSON = response.choices[0].message.content ?? "";
+  return JSON.parse(maybeJSON) as { response: string; fileId: string };
 }
