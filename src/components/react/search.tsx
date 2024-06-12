@@ -50,16 +50,16 @@ const InnerSearch: React.FC<SearchProps> = () => {
   return (
     <div className="grid grid-cols-2 gap-x-4">
       <div className="flex flex-col space-y-6">
-        <div className="w-full flex space-x-2 justify-between">
+        <div className="w-full flex space-x-2 justify-between ">
           <input
-            className="px-4 bg-gray-200 py-2 outline-gray-400 outline text-2xl w-full rounded-sm"
+            className="px-4 bg-gray-200 py-2 outline-gray-400 dark:outline-borders outline text-2xl w-full rounded-sm dark:bg-card dark:text-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             type="text"
             placeholder="Type a search query..."
           />
           <button
-            className="bg-gray-500 outline outline-gray-600 text-white font-semibold px-4 rounded-sm"
+            className="bg-gray-500 outline outline-gray-600 dark:outline-borders text-white  font-semibold px-4 rounded-sm dark:bg-sidebar dark:hover:bg-[#40414c]"
             onClick={() => searchMutation.mutate(searchTerm)}
           >
             Search
@@ -90,7 +90,7 @@ const InnerSearch: React.FC<SearchProps> = () => {
           </div>
         )}
 
-        <h2 className="text-2xl font-semibold">Results: </h2>
+        <h2 className="text-2xl font-semibold dark:text-white">Results: </h2>
 
         {Object.keys(searchMutation.data?.topMatches ?? {}).map((fileId) => {
           const { file, text } = searchMutation.data?.topMatches[fileId]!;

@@ -90,7 +90,7 @@ const Sidebar = () => {
         </ul>
 
         <button
-          className={`ml-8 w-16 h-8 rounded-full bg-white flex items-center transition duration-300 focus:outline-none shadow `}
+          className={`ml-8 w-16 h-8 rounded-full bg-white dark:bg-background dark:shadow-4xl flex item-center transition duration-300 focus:outline-none shadow `}
           onClick={() => setIsDarkmode(!isDarkmode)}
         >
           <div

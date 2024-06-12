@@ -69,7 +69,7 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
       style={{ height: "85vh" }}
     >
       <div
-        className="flex-grow overflow-auto p-4"
+        className="flex-grow overflow-auto p-4 dark:text-white"
         style={{ maxHeight: "calc(85vh - 75px)" }}
       >
         {messagesRes.isLoading || !messagesRes.data ? (
