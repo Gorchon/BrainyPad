@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import db from "../../../../server/db/db";
-import { and, eq, isNull, or } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import {
   conversations,
   files,
@@ -30,12 +30,6 @@ const openai = new OpenAI({
   apiKey: open_ai_key as string,
 });
 
-export interface FileReference {
-  title: string;
-  id: string;
-  refCount: number;
-}
-
 export const GET: APIRoute = async ({ locals, request, params }) => {
   const currentUser = await locals.currentUser();
   if (!currentUser) return new Response("Unauthorized", { status: 401 });
@@ -47,23 +41,17 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
   const message = urlParams.get("message");
   const idType = urlParams.get("type");
 
-  if (!idType && id !== "all") {
+  if (!idType) {
     return new Response("Missing type. Valid values are 'file' or 'note'", {
       status: 400,
     });
   }
 
   let conversation = await db.query.conversations.findFirst({
-    where:
-      id !== "all"
-        ? and(
-            eq(conversations.userId, currentUser.id),
-            or(eq(conversations.fileId, id), eq(conversations.noteId, id))
-          )
-        : and(
-            eq(conversations.userId, currentUser.id),
-            and(isNull(conversations.fileId), isNull(conversations.noteId))
-          ),
+    where: and(
+      eq(conversations.userId, currentUser.id),
+      or(eq(conversations.fileId, id), eq(conversations.noteId, id))
+    ),
   });
 
   if (!conversation) {
@@ -110,20 +98,6 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
       // create the conversation
       await db.insert(conversations).values(conversation);
     }
-
-    if (id === "all") {
-      conversation = {
-        id: crypto.randomUUID(),
-        userId: currentUser.id,
-        fileId: null,
-        updatedAt: new Date(),
-        createdAt: new Date(),
-        noteId: null,
-      };
-
-      // create the conversation
-      await db.insert(conversations).values(conversation);
-    }
   }
 
   // This just tells ts that this will be defined
@@ -136,35 +110,18 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
   });
 
   if (!message) {
-    return new Response(
-      JSON.stringify(
-        {
-          messages: convMessages,
-          referencedFiles: [] as FileReference[],
-        },
-        null,
-        2
-      ),
-      {
-        headers: { "content-type": "application/json" },
-        status: 200,
-      }
-    );
+    return new Response(JSON.stringify({ messages: convMessages }, null, 2), {
+      headers: { "content-type": "application/json" },
+      status: 200,
+    });
   }
 
-  if (idType === "file" || id === "all") {
-    const context =
-      id === "all"
-        ? await nearbyy.semanticSearch({
-            limit: 10,
-            query: message,
-            tag: currentUser.id,
-          })
-        : await nearbyy.semanticSearch({
-            limit: 10,
-            query: message,
-            fileId: id,
-          });
+  if (idType === "file") {
+    const context = await nearbyy.semanticSearch({
+      limit: 10,
+      query: message,
+      fileId: id,
+    });
 
     if (!context.success)
       return new Response("Failed to get context", { status: 500 });
@@ -181,42 +138,6 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
         role: msg.wasFromAi ? "assistant" : "user",
       }))
     );
-
-    let referencedFiles: FileReference[] = [];
-
-    if (context.data.items && context.data.items.length > 0) {
-      console.log(context.data.items);
-
-      // Create a map to count the occurrences of each fileId
-      const fileIdCounts = context.data.items.reduce(
-        (acc: { [key: string]: number }, item) => {
-          acc[item._extras.fileId] = (acc[item._extras.fileId] || 0) + 1;
-          return acc;
-        },
-        {}
-      );
-
-      // Get unique fileIds
-      const uniqueFileIds = Object.keys(fileIdCounts);
-
-      // Fetch files from the database for each unique fileId
-      const filePromises = uniqueFileIds.map(async (fileId) => {
-        const file = await db
-          .select({ name: files.name })
-          .from(files)
-          .where(eq(files.id, fileId));
-
-        const { name } = file[0];
-
-        return {
-          title: name ?? "",
-          id: fileId,
-          refCount: fileIdCounts[fileId],
-        };
-      });
-
-      referencedFiles = await Promise.all(filePromises);
-    }
 
     const newMessages = await db
       .insert(messages)
@@ -243,11 +164,7 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
     const updatedMessages = [...convMessages, ...newMessages];
 
     return new Response(
-      JSON.stringify(
-        { messages: updatedMessages, referencedFiles: referencedFiles },
-        null,
-        2
-      ),
+      JSON.stringify({ messages: updatedMessages }, null, 2),
       {
         headers: { "content-type": "application/json" },
         status: 200,
