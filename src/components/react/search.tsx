@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactQueryProvider from "./react-query-provider";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import type { FileSelect, NoteSelect } from "../../server/db/types";
 
 interface SearchProps {
@@ -46,6 +46,14 @@ const InnerSearch: React.FC<SearchProps> = () => {
     onSuccess: ({ aiOverview, topMatches }) => {
       const { file } = topMatches[aiOverview.fileId];
       setFilePreview(file);
+    },
+  });
+
+  const mkeditor = useQuery({
+    queryKey: ["mkeditor"],
+    queryFn: async () => {
+      const MKEditor = (await import("./MKEditor")).default;
+      return { MKEditor };
     },
   });
 
@@ -121,17 +129,31 @@ const InnerSearch: React.FC<SearchProps> = () => {
       </div>
 
       <div className="w-full sticky top-0 ">
-        {searchMutation.data && filePreview && ("media" in filePreview) && (
+        {searchMutation.data && filePreview && "media" in filePreview && (
           <iframe
             src={filePreview?.media ?? ""}
             className="w-full min-h-[80vh]"
           />
         )}
-        {searchMutation.data && filePreview && ("content" in filePreview) && (
-          <div className="w-full min-h-[80vh]">
-            <p>{filePreview.content}</p>
-          </div>
-        )}
+        {searchMutation.data &&
+          filePreview &&
+          "content" in filePreview &&
+          mkeditor.data &&
+          !mkeditor.isLoading && (
+            <div>
+              <h2 className="dark:text-white text-2xl font-semibold tracking-wide mb-2">
+                {filePreview.title ?? "Missing Title"}
+              </h2>
+              <mkeditor.data.MKEditor
+                delLoading={false}
+                loading={false}
+                onDelete={() => void 0}
+                onSave={() => void 0}
+                setContent={() => void 0}
+                content={filePreview.content ?? ""}
+              />
+            </div>
+          )}
 
         {searchMutation.isLoading && (
           <div className="w-full min-h-[80vh] rounded-md bg-gray-500 animate-pulse"></div>

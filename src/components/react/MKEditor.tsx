@@ -29,12 +29,7 @@ import {
   type SandpackConfig,
   Button,
 } from "@mdxeditor/editor";
-import {
-  Home,
-  Loader,
-  Save,
-  Trash2,
-} from "lucide-react";
+import { Home, Loader, Save, Trash2 } from "lucide-react";
 import { headingsPlugin } from "@mdxeditor/editor";
 
 import "@mdxeditor/editor/style.css";
@@ -53,12 +48,9 @@ interface MKEditorProps {
 type SaveButtonProps = {
   loading: boolean;
   onClick: () => void;
-}
+};
 
-function SaveButton({
-  loading,
-  onClick: onSave,
-}: SaveButtonProps) {
+function SaveButton({ loading, onClick: onSave }: SaveButtonProps) {
   return (
     <Button
       onClick={() => {
