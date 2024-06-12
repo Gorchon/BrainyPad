@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactQueryProvider from "./react-query-provider";
 import { useMutation } from "react-query";
-import type { FileSelect } from "../../server/db/types";
+import type { FileSelect, NoteSelect } from "../../server/db/types";
 
 interface SearchProps {
   children?: React.ReactNode;
@@ -17,7 +17,9 @@ const Search: React.FC<SearchProps> = (props) => {
 
 const InnerSearch: React.FC<SearchProps> = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filePreview, setFilePreview] = useState<FileSelect | null>(null);
+  const [filePreview, setFilePreview] = useState<
+    FileSelect | NoteSelect | null
+  >(null);
 
   const searchMutation = useMutation({
     mutationKey: ["search", searchTerm],
@@ -34,7 +36,7 @@ const InnerSearch: React.FC<SearchProps> = () => {
             chunkid: string;
             text: string;
             distance: number;
-            file: FileSelect;
+            file: FileSelect | NoteSelect;
           }
         >;
       };
@@ -95,8 +97,19 @@ const InnerSearch: React.FC<SearchProps> = () => {
         {Object.keys(searchMutation.data?.topMatches ?? {}).map((fileId) => {
           const { file, text } = searchMutation.data?.topMatches[fileId]!;
 
+          console.log(searchMutation.data);
+          console.log(searchMutation.data?.topMatches[fileId]!);
+
           const summary = text.slice(0, 200) + "...";
-          const nameWithoutExtension = file.name?.split(".")[0];
+
+          let nameWithoutExtension = "";
+
+          if ("title" in file) {
+            nameWithoutExtension = file.title ?? "Missing Note Title";
+          } else {
+            nameWithoutExtension =
+              file.name?.split(".")[0] ?? "Missing File Name";
+          }
 
           return (
             <a href={`/files/${file.id}`}>
@@ -108,11 +121,16 @@ const InnerSearch: React.FC<SearchProps> = () => {
       </div>
 
       <div className="w-full sticky top-0 ">
-        {searchMutation.data && (
+        {searchMutation.data && filePreview && ("media" in filePreview) && (
           <iframe
             src={filePreview?.media ?? ""}
             className="w-full min-h-[80vh]"
           />
+        )}
+        {searchMutation.data && filePreview && ("content" in filePreview) && (
+          <div className="w-full min-h-[80vh]">
+            <p>{filePreview.content}</p>
+          </div>
         )}
 
         {searchMutation.isLoading && (

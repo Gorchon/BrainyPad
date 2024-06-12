@@ -4,8 +4,8 @@ import { NearbyyClient } from "@nearbyy/core";
 import { OpenAI } from "openai";
 import db from "../../../server/db/db";
 import { eq } from "drizzle-orm";
-import { files } from "../../../server/db/schema";
-import type { FileSelect } from "../../../server/db/types";
+import { files, notes } from "../../../server/db/schema";
+import type { FileSelect, NoteSelect } from "../../../server/db/types";
 
 const nearbyy_key = import.meta.env.NEARBYY_API_KEY;
 
@@ -50,17 +50,29 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
 
   const fileIdAndTopChunk: Record<
     string,
-    { chunkid: string; text: string; distance: number; file: FileSelect }
+    {
+      chunkid: string;
+      text: string;
+      distance: number;
+      file: FileSelect | NoteSelect;
+    }
   > = {};
 
   const promises: Promise<void>[] = [];
 
   for (const item of topMatches.data.items) {
     if (!fileIdAndTopChunk[item._extras.fileId]) {
-      const p = new Promise<void>(async (res) => {
-        const file = await db.query.files.findFirst({
-          where: eq(files.id, item._extras.fileId),
-        });
+      const p = new Promise<void>(async (res, rej) => {
+        let file: FileSelect | NoteSelect | undefined =
+          await db.query.files.findFirst({
+            where: eq(files.id, item._extras.fileId),
+          });
+
+        if (!file) {
+          file = await db.query.notes.findFirst({
+            where: eq(notes.nearbyy_id, item._extras.fileId),
+          });
+        }
 
         fileIdAndTopChunk[item._extras.fileId] = {
           chunkid: item.chunkId,
