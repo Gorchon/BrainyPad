@@ -5,19 +5,19 @@ import type { NoteSelect } from "../../server/db/types";
 import type { ContentBody } from "../../pages/api/notes/update";
 interface NoteEditorProps {
   id: string;
+  hideContent?: boolean;
 }
 
-const NoteEditor: React.FC<NoteEditorProps> = ({ id }) => {
+const NoteEditor: React.FC<NoteEditorProps> = ({ id, hideContent }) => {
   return (
     <ReactQueryProvider>
-      <InnerNoteEditor id={id} />
+      <InnerNoteEditor id={id} hideContent={hideContent} />
     </ReactQueryProvider>
   );
 };
 
-const InnerNoteEditor = ({ id }: NoteEditorProps) => {
+const InnerNoteEditor = ({ id, hideContent }: NoteEditorProps) => {
   const [content, setContent] = React.useState("");
-  let timeoutId = useRef<number | null>(null);
 
   const note = useQuery(
     ["note", id],
@@ -77,14 +77,19 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
 
   return (
     <div className="h-full w-[40vw] dark:bg-[#232329] bg-[#e5e7eb] bg-opacity-25 dark:bg-opacity-50">
-      <mkeditor.data.MKEditor
-        content={content}
-        setContent={setContent}
-        loading={updateMutation.isLoading}
-        onSave={async () => updateMutation.mutate()}
-        delLoading={deleteMutation.isLoading}
-        onDelete={async () => deleteMutation.mutate()}
-      />
+      <div className={`${hideContent ? "hidden" : "block"}`}>
+        <mkeditor.data.MKEditor
+          content={content}
+          setContent={setContent}
+          loading={updateMutation.isLoading}
+          onSave={async () => updateMutation.mutate()}
+          delLoading={deleteMutation.isLoading}
+          onDelete={async () => deleteMutation.mutate()}
+        />
+      </div>
+      <div className={`${hideContent ? "block" : "hidden"}`}>
+        Content is being hiden for now...
+      </div>
     </div>
   );
 };

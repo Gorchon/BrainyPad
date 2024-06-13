@@ -1,10 +1,9 @@
 ---
 import Page from "../../layouts/Page.astro";
-import NoteEditor from "../../components/react/note-editor";
+import NotePage from "../../components/react/note-page";
 import db from "../../server/db/db";
 import { eq } from "drizzle-orm";
 import { notes } from "../../server/db/schema";
-import Chat from "../../components/react/chat";
 
 const { id: paramsId } = Astro.params;
 const id = paramsId!;
@@ -18,7 +17,6 @@ const title = note[0].title;
     {title}
   </div>
   <div style="display: flex; justify-content: space-evenly; width: 80vw;">
-    <NoteEditor client:load id={id} />
-    <Chat type="note" id={id} client:load />
+    <NotePage id={id} client:load />
   </div>
 </Page>

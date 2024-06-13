@@ -3,7 +3,7 @@ import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { NoteSelect } from "../../server/db/types";
 import type { NewNoteBody } from "../../pages/api/notes/new";
-import { CirclePlus, GripHorizontal, Loader, Trash2 } from "lucide-react";
+import { CirclePlus, Loader, Trash2 } from "lucide-react";
 
 interface RecentNotesProps {
   children?: React.ReactNode;
@@ -96,7 +96,7 @@ const NotePreview = ({
 
   return (
     <a
-      href={`/notes/${id}?title=${title}`}
+      href={`/notes/${id}`}
       onClick={(event) => {
         // Ensure event.target is an Element
         const target = event.target as Element;
