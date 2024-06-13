@@ -8,8 +8,8 @@ function RecentFiles() {
   return (
     <ReactQueryProvider>
       <div className="grid grid-cols-4 gap-8">
-        <InnerRecentNotes />
         <UploadFileButton />
+        <InnerRecentNotes />
       </div>
     </ReactQueryProvider>
   );
@@ -190,7 +190,7 @@ function UploadFileButton() {
           <input
             type="file"
             className="hidden"
-            multiple={false}
+            multiple
             ref={fileInputRef}
             onChange={onFileSelect}
             disabled={isLoading}
