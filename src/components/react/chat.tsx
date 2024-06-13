@@ -4,9 +4,20 @@ import { useMutation, useQuery } from "react-query";
 import type { MessageSelect } from "../../server/db/types";
 import type { Reference } from "../../pages/api/assistant/chat";
 import { Loader, Trash2 } from "lucide-react";
+// import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 type ChatProps =
-  | { id: string; type: "file" | "note" }
+  | {
+      id: string;
+      type: "file" | "note";
+      // These functions expose the ability to run some
+      // code when the quiz starts and ends. This is useful
+      // for updating the UI, for hiding the note's content
+      // while the quiz is running, for example.
+      onQuizStart?: () => void;
+      onQuizEnd?: () => void;
+    }
   | { id?: undefined; type?: undefined };
 
 const Chat: React.FC<ChatProps> = (props) => {
@@ -17,8 +28,28 @@ const Chat: React.FC<ChatProps> = (props) => {
   );
 };
 
-const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
+const InnerChat: React.FC<ChatProps> = ({ id, type, ...rest }) => {
   const [referencedFiles, setReferencedFiles] = useState<Reference[]>([]);
+  const [isOnQuiz, setIsOnQuiz] = useState(false);
+  const [answers, setAnswers] = useState<
+    Record<
+      `question${number}`,
+      {
+        selected: number;
+      }
+    >
+  >({
+    question1: {
+      selected: -1,
+    },
+    question2: {
+      selected: -1,
+    },
+    question3: {
+      selected: -1,
+    },
+  });
+  const [quizResult, setQuizResult] = useState<number | null>(null);
 
   const messagesRes = useQuery({
     queryKey: ["messages", type, id],
@@ -78,6 +109,67 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
     },
   });
 
+  const makeQuizMutation = useMutation({
+    mutationKey: [id, "make-quiz-mutation"],
+    mutationFn: async () => {
+      const endpoint = `/api/assistant/quiz/${id}`;
+
+      return fetch(endpoint).then((res) => res.json()) as Promise<{
+        questions: {
+          question: string;
+          options: { option: string; correct: boolean }[];
+        }[];
+      }>;
+    },
+    onSuccess: () => {
+      setIsOnQuiz(true);
+      if ("onQuizStart" in rest && rest.onQuizStart) {
+        rest.onQuizStart();
+      }
+    },
+  });
+
+  const checkAnswers = () => {
+    if (!isOnQuiz) return;
+    if (!makeQuizMutation.data) return;
+
+    let correctAnswers = 0;
+
+    Object.entries(answers).forEach(([key, value]) => {
+      const questionNumber = parseInt(key.replace("question", "")) - 1;
+      const selectedOption = value.selected;
+      const correctIndex = makeQuizMutation.data.questions[
+        questionNumber
+      ].options.findIndex((opt) => opt.correct);
+
+      if (selectedOption === correctIndex) {
+        correctAnswers++;
+      }
+    });
+
+    setQuizResult(correctAnswers);
+    console.log("Correct answers:", correctAnswers);
+  };
+
+  const endQuiz = () => {
+    setIsOnQuiz(false);
+    setQuizResult(null);
+    setAnswers({
+      question1: {
+        selected: -1,
+      },
+      question2: {
+        selected: -1,
+      },
+      question3: {
+        selected: -1,
+      },
+    });
+    if ("onQuizEnd" in rest && rest.onQuizEnd) {
+      rest.onQuizEnd();
+    }
+  };
+
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
@@ -92,30 +184,78 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
 
   return (
     <div className="flex flex-grow justify-evenly space-x-3">
+      {quizResult && makeQuizMutation.data && (
+        <div className="fixed top-0 left-0 bottom-0 right-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-8 flex flex-col space-y-4 rounded-md">
+            <h2 className="text-2xl font-semibold">Quiz results</h2>
+            <p>You got {quizResult}/3</p>
+            {makeQuizMutation.data.questions.map((question, qIdx) => {
+              const correctIdx = question.options.findIndex((o) => o.correct);
+              const answerIdx = answers[`question${qIdx + 1}`].selected;
+
+              if (answerIdx !== correctIdx) {
+                return (
+                  <div>
+                    <p>You got question {qIdx + 1} wrong!</p>
+                    <p>Your answer: {question.options[answerIdx].option}</p>
+                    <p>Correct answer: {question.options[correctIdx].option}</p>
+                  </div>
+                );
+              }
+            })}
+            <button
+              onClick={endQuiz}
+              className="bg-gray-600 hover:bg-blue-700 text-white px-7 py-2 rounded-lg focus:outline-none border-2 border-gray-300 dark dark:bg-sidebar dark:border-gray-500 dark:hover:bg-blue-500 dark:text-white"
+            >
+              End Quiz
+            </button>
+          </div>
+        </div>
+      )}
+      {quizResult && quizResult === 3 && (
+        <Confetti
+          width={window.document.body.clientWidth}
+          height={window.document.body.clientHeight}
+        />
+      )}
       <div
         className="flex flex-col h-screen bg-[#e3e8ed] w-full rounded-lg shadow relative dark:bg-chat"
         style={{ height: "85vh" }}
       >
+        {!!id && (
+          <div className="flex space-x-2 p-4 bg-gray-300">
+            <button
+              disabled={makeQuizMutation.isLoading}
+              onClick={() => {
+                makeQuizMutation.mutate();
+              }}
+              className="bg-gray-600 hover:bg-blue-700 text-white px-7 py-2 rounded-lg focus:outline-none border-2 border-gray-300 dark dark:bg-sidebar dark:border-gray-500 dark:hover:bg-blue-500 dark:text-white"
+            >
+              {makeQuizMutation.isLoading ? "Making quiz..." : "Make a quiz"}
+            </button>
+          </div>
+        )}
         <div
-          className="flex-grow overflow-auto p-4"
+          className="flex-grow overflow-auto p-4 pb-20"
           style={{ maxHeight: "calc(85vh - 75px)" }}
         >
           {messagesRes.isLoading || !messagesRes.data ? (
             <>Loading...</>
           ) : (
             <>
-              {messagesRes.data.messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`dark:bg-message dark:text-white my-2 mx-4 p-2 rounded-lg shadow max-w-lg ${
-                    !message.wasFromAi
-                      ? "ml-auto bg-blue-100"
-                      : "mr-auto bg-gray-200"
-                  }`}
-                >
-                  {message.content}
-                </div>
-              ))}
+              {!isOnQuiz &&
+                messagesRes.data.messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`dark:bg-message dark:text-white my-2 mx-4 p-2 rounded-lg shadow max-w-lg ${
+                      !message.wasFromAi
+                        ? "ml-auto bg-blue-100"
+                        : "mr-auto bg-gray-200"
+                    }`}
+                  >
+                    {message.content}
+                  </div>
+                ))}
               {sendMessageMutation.isLoading && (
                 <div className="my-2 mx-4 p-2 rounded-lg shadow max-w-lg ml-auto bg-blue-100 dark:bg-message dark:text-white">
                   {sendMessageMutation.variables}
@@ -123,6 +263,54 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
               )}
             </>
           )}
+          <>
+            {!makeQuizMutation.isLoading &&
+              makeQuizMutation.isSuccess &&
+              makeQuizMutation.data &&
+              isOnQuiz && (
+                <div>
+                  {makeQuizMutation.data.questions.map((question, qIdx) => {
+                    return (
+                      <div>
+                        <h3>Question {qIdx + 1}</h3>
+                        <p>{question.question}</p>
+                        {question.options.map((option, oIdx) => {
+                          return (
+                            <div
+                              className="flex space-x-2 items-center"
+                              onClick={() => {
+                                setAnswers((prev) => ({
+                                  ...prev,
+                                  [`question${qIdx + 1}`]: {
+                                    selected: oIdx,
+                                  },
+                                }));
+                              }}
+                            >
+                              <div
+                                className={`h-4 w-4 border-black border rounded-full ${
+                                  answers[`question${qIdx + 1}`].selected ===
+                                  oIdx
+                                    ? "bg-gray-400"
+                                    : "bg-gray-200"
+                                }`}
+                              />
+                              <p>{option.option}</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                  <button
+                    onClick={checkAnswers}
+                    className="bg-blue-500 text-white p-2 rounded-lg"
+                  >
+                    Submit answers
+                  </button>
+                </div>
+              )}
+          </>
           <div ref={messagesEndRef} />
         </div>
         <div className="flex items-center p-2 bg-gray-100 absolute bottom-0 w-full dark:bg-borders">
