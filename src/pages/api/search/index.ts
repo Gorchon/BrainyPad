@@ -131,6 +131,7 @@ async function makeAIResponse(query: string, context: string) {
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     messages,
+    response_format: { type: "json_object" },
   });
 
   const maybeJSON = response.choices[0].message.content ?? "";

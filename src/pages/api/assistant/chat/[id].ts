@@ -71,6 +71,7 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
         updatedAt: new Date(),
         createdAt: new Date(),
         noteId: null,
+        default: false,
       };
 
       // create the conversation
@@ -93,6 +94,7 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
         updatedAt: new Date(),
         createdAt: new Date(),
         noteId: note.id,
+        default: false,
       };
 
       // create the conversation
@@ -100,8 +102,8 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
     }
   }
 
-  // This just tells ts that this will be defined
-  conversation = conversation!;
+  if (!conversation)
+    return new Response("Conversation not found", { status: 404 });
 
   // now, we need to find all the messages in this conversation
   const convMessages = await db.query.messages.findMany({
@@ -110,7 +112,7 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
   });
 
   if (!message) {
-    return new Response(JSON.stringify({ messages: convMessages }, null, 2), {
+    return new Response(JSON.stringify({ messages: convMessages }), {
       headers: { "content-type": "application/json" },
       status: 200,
     });

@@ -8,25 +8,14 @@ const newDeleteContentValidator = z.object({
   id: z.string(),
 });
 
-export const DELETE: APIRoute = async ({ locals, request }) => {
+export const DELETE: APIRoute = async ({ locals, request, params }) => {
   let errorResponse = null;
 
   try {
     const currentUser = await locals.currentUser();
     if (!currentUser) return new Response("Unauthorized", { status: 401 });
 
-    const body = (await request.json()) as unknown;
-    const validatedBody = newDeleteContentValidator.safeParse(body);
-
-    if (!validatedBody.success)
-      return new Response("Invalid request", { status: 400 });
-
-    if (!validatedBody.data)
-      return new Response("Cannot find conversation by given id", {
-        status: 400,
-      });
-
-    const { id } = validatedBody.data;
+    const id = params.id!;
 
     // Delete messages that reference the conversation
     await db.delete(messages).where(eq(messages.conversationId, id));

@@ -41,6 +41,7 @@ export const conversations = pgTable("conversations", {
   userId: varchar("user_id").references(() => users.id),
   fileId: varchar("file_id").references(() => files.id),
   noteId: varchar("note_id").references(() => notes.id),
+  default: boolean("default").default(false),
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
 });

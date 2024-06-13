@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import ReactQueryProvider, { queryClient } from "./react-query-provider";
 import { useMutation, useQuery } from "react-query";
 import type { MessageSelect } from "../../server/db/types";
+import type { Reference } from "../../pages/api/assistant/chat";
+import { Loader, Trash2 } from "lucide-react";
 
 type ChatProps =
   | { id: string; type: "file" | "note" }
@@ -16,6 +18,8 @@ const Chat: React.FC<ChatProps> = (props) => {
 };
 
 const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
+  const [referencedFiles, setReferencedFiles] = useState<Reference[]>([]);
+
   const messagesRes = useQuery({
     queryKey: ["messages", type, id],
     queryFn: async () => {
@@ -37,18 +41,41 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
     mutationFn: async (message: string) => {
       const endpoint = id
         ? `/api/assistant/chat/${id}?type=${type}&message=${message}`
-        : `/api/assistant/chat?type=${type}&message=${message}`;
+        : `/api/assistant/chat?message=${message}`;
 
       const response = await fetch(endpoint);
       const data = (await response.json()) as Promise<{
         messages: MessageSelect[];
+        reference?: Reference;
       }>;
 
       return data;
     },
     onMutate: () => scrollToBottom(),
+    onSuccess: (data) => {
+      if (data.reference) {
+        setReferencedFiles([...referencedFiles, data.reference]);
+      }
+    },
     onSettled: () =>
       queryClient.invalidateQueries({ queryKey: ["messages", type, id] }),
+  });
+
+  const deleteConversationMutation = useMutation({
+    mutationKey: [id, "delete-conversation-mutation"],
+    mutationFn: async (id: string) => {
+      const endpoint = `/api/conversations/${id}`;
+
+      return fetch(endpoint, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    },
+    onSuccess: () => {
+      messagesRes.refetch();
+    },
   });
 
   const [input, setInput] = useState("");
@@ -64,55 +91,85 @@ const InnerChat: React.FC<ChatProps> = ({ id, type }) => {
   }
 
   return (
-    <div
-      className="flex flex-col h-screen bg-[#e3e8ed] rounded-lg shadow relative w-1/2 dark:bg-chat"
-      style={{ height: "85vh" }}
-    >
+    <div className="flex flex-grow justify-evenly space-x-3">
       <div
-        className="flex-grow overflow-auto p-4"
-        style={{ maxHeight: "calc(85vh - 75px)" }}
+        className="flex flex-col h-screen bg-[#e3e8ed] w-full rounded-lg shadow relative dark:bg-chat"
+        style={{ height: "85vh" }}
       >
-        {messagesRes.isLoading || !messagesRes.data ? (
-          <>Loading...</>
-        ) : (
-          <>
-            {messagesRes.data.messages.map((message) => (
-              <div
-                key={message.id}
-                className={`dark:bg-message dark:text-white my-2 mx-4 p-2 rounded-lg shadow max-w-lg ${
-                  !message.wasFromAi
-                    ? "ml-auto bg-blue-100"
-                    : "mr-auto bg-gray-200"
-                }`}
-              >
-                {message.content}
-              </div>
-            ))}
-            {sendMessageMutation.isLoading && (
-              <div className="my-2 mx-4 p-2 rounded-lg shadow max-w-lg ml-auto bg-blue-100 dark:bg-message dark:text-white">
-                {sendMessageMutation.variables}
-              </div>
-            )}
-          </>
-        )}
-
-        <div ref={messagesEndRef} />
-      </div>
-      <div className="flex items-center p-2 bg-gray-100 absolute bottom-0 w-full dark:bg-borders">
-        <input
-          className="flex-grow p-2 border-2 border-r-0 border-gray-300 rounded-l-lg focus:outline-none dark:bg-card dark:text-white dark:border-gray-500"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          placeholder="Write your message"
-        />
-        <button
-          className="bg-gray-600 hover:bg-blue-700 text-white px-7 py-2 rounded-r-lg focus:outline-none border-2 border-gray-300 dark dark:bg-sidebar dark:border-gray-500 dark:hover:bg-blue-500 dark:text-white"
-          onClick={handleSend}
+        <div
+          className="flex-grow overflow-auto p-4"
+          style={{ maxHeight: "calc(85vh - 75px)" }}
         >
-          Send
-        </button>
+          {messagesRes.isLoading || !messagesRes.data ? (
+            <>Loading...</>
+          ) : (
+            <>
+              {messagesRes.data.messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`dark:bg-message dark:text-white my-2 mx-4 p-2 rounded-lg shadow max-w-lg ${
+                    !message.wasFromAi
+                      ? "ml-auto bg-blue-100"
+                      : "mr-auto bg-gray-200"
+                  }`}
+                >
+                  {message.content}
+                </div>
+              ))}
+              {sendMessageMutation.isLoading && (
+                <div className="my-2 mx-4 p-2 rounded-lg shadow max-w-lg ml-auto bg-blue-100 dark:bg-message dark:text-white">
+                  {sendMessageMutation.variables}
+                </div>
+              )}
+            </>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+        <div className="flex items-center p-2 bg-gray-100 absolute bottom-0 w-full dark:bg-borders">
+          <input
+            className="flex-grow p-2 border-2 border-r-0 border-gray-300 rounded-l-lg focus:outline-none dark:bg-card dark:text-white dark:border-gray-500"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            placeholder="Write your message"
+          />
+          <button
+            className="bg-gray-600 hover:bg-blue-700 text-white px-7 py-2 rounded-r-lg focus:outline-none border-2 border-gray-300 dark dark:bg-sidebar dark:border-gray-500 dark:hover:bg-blue-500 dark:text-white"
+            onClick={handleSend}
+          >
+            Send
+          </button>
+          {deleteConversationMutation.isLoading ? (
+            <Loader size={30} className="stroke-2 motion-safe:animate-spin" />
+          ) : (
+            <Trash2
+              onClick={() =>
+                deleteConversationMutation.mutate(
+                  messagesRes.data?.messages[0].conversationId ?? ""
+                )
+              }
+              size={30}
+              className="cursor-pointer stroke-2"
+            />
+          )}
+        </div>
       </div>
+      {!id && (
+        <div className="bg-[#e3e8ed] dark:bg-card flex flex-col justify-start items-start w-full h-full p-4 rounded-lg shadow-lg mr-5">
+          <h2 className="font-bold text-lg dark:text-white mb-3">
+            Sources Referenced
+          </h2>
+          <ul className="pl-4 dark:text-white mb-2">
+            {referencedFiles.map((ref, idx) => (
+              <li className="list-disc text-lg" key={`${idx}_${ref.id}`}>
+                <a href={`${ref.type}s/${ref.id}`}>{`${ref.title} (${
+                  idx + 1
+                })`}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
