@@ -13,8 +13,8 @@ const RecentNotes: React.FC<RecentNotesProps> = () => {
   return (
     <ReactQueryProvider>
       <div className="grid grid-cols-4 gap-8">
-        <InnerRecentNotes />
         <CreateNoteButton />
+        <InnerRecentNotes />
       </div>
     </ReactQueryProvider>
   );
@@ -45,6 +45,7 @@ const CreateNoteButton = () => {
   const { isLoading, mutate } = useMutation({
     mutationFn: () => {
       const name = prompt("Enter note name");
+      if (!name) throw new Error("No name provided");
 
       return fetch("/api/notes/new", {
         method: "POST",
@@ -80,7 +81,7 @@ const NotePreview = ({
   refetch: () => void;
 }) => {
   // get first 100 characters of content
-  const contentExcerpt = useMemo(() => content.slice(0, 100), [content]);
+  const contentExcerpt = useMemo(() => content.slice(0, 200), [content]);
 
   const deleteMutation = useMutation({
     mutationFn: () => {
@@ -105,6 +106,9 @@ const NotePreview = ({
       }}
       className="h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-end hover:scale-[1.015] z-0 transition-all ease-out duration-20 my-2"
     >
+      <div className="p-4">
+        <p className="text-lg text-gray-500">{contentExcerpt}...</p>
+      </div>
       <div className="bg-gray-400 dark:bg-card-footer h-16 w-full flex items-center justify-start px-2 text-xl font-medium outline z-20 outline-3 outline-gray-600 dark:outline-borders">
         <span className="flex w-full justify-between items-center">
           <p className="dark:text-white">{title}</p>
