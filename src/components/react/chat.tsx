@@ -183,7 +183,7 @@ const InnerChat: React.FC<ChatProps> = ({ id, type, ...rest }) => {
   }
 
   return (
-    <div className="flex flex-grow justify-evenly space-x-3">
+    <div className="flex flex-grow justify-evenly space-x-3 overflow-y-clip">
       {quizResult && makeQuizMutation.data && (
         <div className="fixed top-0 left-0 bottom-0 right-0 flex items-center justify-center bg-black/50 z-50">
           <div className="bg-white p-8 flex flex-col space-y-4 rounded-md">
