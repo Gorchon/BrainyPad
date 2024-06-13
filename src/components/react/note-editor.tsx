@@ -63,27 +63,6 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
     }
   }, [note.isSuccess]);
 
-  /**
-   * Creates a timer to update the note content x seconds after every change
-   * If any changes are made during those x seconds, the timer is reset
-   */
-  useEffect(() => {
-    const timeInterval = 10 * 1000;
-    // Call the mutation when content changes
-    if (content && content != note.data?.content) {
-      // Clear the previous timer
-      if (timeoutId.current) {
-        window.clearTimeout(timeoutId.current);
-      }
-
-      // Set up a new timer
-      timeoutId.current = window.setTimeout(() => {
-        console.log("Updating note content");
-        updateMutation.mutate();
-      }, timeInterval);
-    }
-  }, [content]);
-
   const mkeditor = useQuery({
     queryKey: ["mkeditor"],
     queryFn: async () => {
