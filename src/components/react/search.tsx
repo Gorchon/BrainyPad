@@ -120,7 +120,7 @@ const InnerSearch: React.FC<SearchProps> = () => {
           }
 
           return (
-            <a href={`/files/${file.id}`}>
+            <a key={file.id} href={`/files/${file.id}`}>
               <h3 className="text-xl">{nameWithoutExtension}</h3>
               <p>{summary}</p>
             </a>
