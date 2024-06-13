@@ -1,9 +1,4 @@
-import {
-  Home,
-  Search,
-  MessageCircleMore,
-  Folders,
-} from "lucide-react";
+import { Home, Search, MessageCircleMore, Folders } from "lucide-react";
 
 import { UserButton } from "@clerk/clerk-react";
 import ClerkContext from "./clerk-provider";
@@ -12,8 +7,11 @@ import { useEffect, useState } from "react";
 const userButtonDimensions = { height: 60, width: 60 };
 
 const Sidebar = () => {
-  const [isDarkmode, setIsDarkmode] = useState(()=>{
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches && localStorage.getItem("isDarkmode") === null) {
+  const [isDarkmode, setIsDarkmode] = useState(() => {
+    if (
+      window.matchMedia("(prefers-color-scheme: dark)").matches &&
+      localStorage.getItem("isDarkmode") === null
+    ) {
       return true;
     }
     if (localStorage.getItem("isDarkmode") === "true") {
@@ -48,7 +46,9 @@ const Sidebar = () => {
         className="flex flex-col w-80 sticky top-0 bg-gray-200 dark:bg-sidebar shadow-md overflow-hidden z-10"
         style={{ height: "100vh" }}
       >
-        <a href="/" className="p-5 font-bold text-5xl dark:text-white">BrainyPad</a>
+        <a href="/" className="p-5 font-bold text-5xl dark:text-white">
+          BrainyPad
+        </a>
         <ul className="flex-grow overflow-auto space-y-8 p-8 text-xl">
           {" "}
           <li>
@@ -109,9 +109,9 @@ const Sidebar = () => {
                 stroke="currentColor"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
                 />
               </svg>
@@ -123,9 +123,9 @@ const Sidebar = () => {
                 stroke="currentColor"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
                 />
               </svg>
