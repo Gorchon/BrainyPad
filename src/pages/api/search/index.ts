@@ -120,7 +120,7 @@ async function makeAIResponse(query: string, context: string) {
   will be given a question and provide a very brief, and concise 
   answer that inmediately addresses the user's query, using only
   the information the system will provide as context. Respond with
-  the following json format: { "response": "your response here", "fileId": "the-file-id-of-your-source" }`;
+  the following json format: { "response": "your response here", "fileId": "the-file-id-of-your-most-important-source" }`;
 
   const messages: OpenAI.ChatCompletionMessageParam[] = [
     { role: "system", content: prompt },
