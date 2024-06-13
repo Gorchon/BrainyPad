@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { NearbyyClient } from "@nearbyy/core";
 import db from "../../../server/db/db";
 import { files } from "../../../server/db/schema";
+import type { Placeholder, SQL } from "drizzle-orm";
 
 const nearbyy_key = import.meta.env.NEARBYY_API_KEY;
 
@@ -37,7 +38,6 @@ export const POST: APIRoute = async ({ locals, request }) => {
   const promises = res.data.files.map((file) => {
     return db.insert(files).values({
       id: file.id,
-      nearbyy_id: "",
       name: fileValue.name,
       userId: currentUser.id,
       updatedAt: new Date(),

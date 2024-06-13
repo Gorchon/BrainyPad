@@ -4,8 +4,8 @@ import { NearbyyClient } from "@nearbyy/core";
 import { OpenAI } from "openai";
 import db from "../../../server/db/db";
 import { eq } from "drizzle-orm";
-import { files } from "../../../server/db/schema";
-import type { FileSelect } from "../../../server/db/types";
+import { files, notes } from "../../../server/db/schema";
+import type { FileSelect, NoteSelect } from "../../../server/db/types";
 
 const nearbyy_key = import.meta.env.NEARBYY_API_KEY;
 
@@ -50,17 +50,29 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
 
   const fileIdAndTopChunk: Record<
     string,
-    { chunkid: string; text: string; distance: number; file: FileSelect }
+    {
+      chunkid: string;
+      text: string;
+      distance: number;
+      file: FileSelect | NoteSelect;
+    }
   > = {};
 
   const promises: Promise<void>[] = [];
 
   for (const item of topMatches.data.items) {
     if (!fileIdAndTopChunk[item._extras.fileId]) {
-      const p = new Promise<void>(async (res) => {
-        const file = await db.query.files.findFirst({
-          where: eq(files.id, item._extras.fileId),
-        });
+      const p = new Promise<void>(async (res, rej) => {
+        let file: FileSelect | NoteSelect | undefined =
+          await db.query.files.findFirst({
+            where: eq(files.id, item._extras.fileId),
+          });
+
+        if (!file) {
+          file = await db.query.notes.findFirst({
+            where: eq(notes.nearbyy_id, item._extras.fileId),
+          });
+        }
 
         fileIdAndTopChunk[item._extras.fileId] = {
           chunkid: item.chunkId,
@@ -80,17 +92,19 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
 
   const firstTen = topMatches.data.items.slice(0, 10);
   const contextMsg = firstTen
-    .map((chunk) => `chunk_id: ${chunk.chunkId}\nchunk_text: ${chunk.text}`)
+    .map(
+      (chunk) => `file_id: ${chunk._extras.fileId}\nchunk_text: ${chunk.text}`
+    )
     .join("---\n\n");
 
-  const aiResponse = await makeAIResponse(query, contextMsg);
+  const { fileId, response } = await makeAIResponse(query, contextMsg);
 
   return new Response(
     JSON.stringify(
       {
         aiOverview: {
-          response: aiResponse,
-          fileId: firstTen[0]._extras.fileId,
+          response: response,
+          fileId: fileId,
         },
         topMatches: fileIdAndTopChunk,
       },
@@ -105,7 +119,8 @@ async function makeAIResponse(query: string, context: string) {
   the questions they have using information in the database. You
   will be given a question and provide a very brief, and concise 
   answer that inmediately addresses the user's query, using only
-  the information the system will provide as context.`;
+  the information the system will provide as context. Respond with
+  the following json format: { "response": "your response here", "fileId": "the-file-id-of-your-most-important-source" }`;
 
   const messages: OpenAI.ChatCompletionMessageParam[] = [
     { role: "system", content: prompt },
@@ -116,7 +131,9 @@ async function makeAIResponse(query: string, context: string) {
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     messages,
+    response_format: { type: "json_object" },
   });
 
-  return response.choices[0].message.content ?? "";
+  const maybeJSON = response.choices[0].message.content ?? "";
+  return JSON.parse(maybeJSON) as { response: string; fileId: string };
 }

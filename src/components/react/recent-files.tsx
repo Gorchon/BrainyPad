@@ -8,8 +8,8 @@ function RecentFiles() {
   return (
     <ReactQueryProvider>
       <div className="grid grid-cols-4 gap-8">
-        <InnerRecentNotes />
         <UploadFileButton />
+        <InnerRecentNotes />
       </div>
     </ReactQueryProvider>
   );
@@ -26,20 +26,32 @@ function InnerRecentNotes() {
     return <div className="dark:text-white ">Loading...</div>;
 
   return data.map((file) => (
-    <FilePreview key={file.id} name={file.name ?? ""} id={file.id} refetch={refetch} />
+    <FilePreview
+      key={file.id}
+      name={file.name ?? ""}
+      id={file.id}
+      refetch={refetch}
+    />
   ));
 }
 
-function FilePreview({ name, id, refetch }: { name: string; id: string, refetch: () => void}) {
+function FilePreview({
+  name,
+  id,
+  refetch,
+}: {
+  name: string;
+  id: string;
+  refetch: () => void;
+}) {
   function navigateTo(href: string) {
     window.location.href = href;
   }
 
   const deleteMutation = useMutation({
     mutationFn: () => {
-      return fetch(`/api/files/delete`, {
+      return fetch(`/api/files/${id}`, {
         method: "DELETE",
-        body: JSON.stringify({ id } as { id: string }),
       });
     },
     onSuccess: () => {
@@ -178,7 +190,7 @@ function UploadFileButton() {
           <input
             type="file"
             className="hidden"
-            multiple={false}
+            multiple
             ref={fileInputRef}
             onChange={onFileSelect}
             disabled={isLoading}

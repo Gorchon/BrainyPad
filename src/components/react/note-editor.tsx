@@ -5,19 +5,19 @@ import type { NoteSelect } from "../../server/db/types";
 import type { ContentBody } from "../../pages/api/notes/update";
 interface NoteEditorProps {
   id: string;
+  hideContent?: boolean;
 }
 
-const NoteEditor: React.FC<NoteEditorProps> = ({ id }) => {
+const NoteEditor: React.FC<NoteEditorProps> = ({ id, hideContent }) => {
   return (
     <ReactQueryProvider>
-      <InnerNoteEditor id={id} />
+      <InnerNoteEditor id={id} hideContent={hideContent} />
     </ReactQueryProvider>
   );
 };
 
-const InnerNoteEditor = ({ id }: NoteEditorProps) => {
+const InnerNoteEditor = ({ id, hideContent }: NoteEditorProps) => {
   const [content, setContent] = React.useState("");
-  let timeoutId = useRef<number | null>(null);
 
   const note = useQuery(
     ["note", id],
@@ -46,15 +46,14 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
 
   const deleteMutation = useMutation({
     mutationFn: () => {
-      return fetch(`/api/notes/delete`, {
+      return fetch(`/api/notes/${id}`, {
         method: "DELETE",
-        body: JSON.stringify({ id } as { id: string }),
       });
     },
     onSuccess: () => {
       window.location.href = "/";
-    }
-  })
+    },
+  });
 
   //Set the note content when the note is loaded
   useEffect(() => {
@@ -63,27 +62,6 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
       setContent(note.data?.content ?? "");
     }
   }, [note.isSuccess]);
-
-  /**
-   * Creates a timer to update the note content x seconds after every change
-   * If any changes are made during those x seconds, the timer is reset
-   */
-  useEffect(() => {
-    const timeInterval = 10 * 1000;
-    // Call the mutation when content changes
-    if (content && content != note.data?.content) {
-      // Clear the previous timer
-      if (timeoutId.current) {
-        window.clearTimeout(timeoutId.current);
-      }
-
-      // Set up a new timer
-      timeoutId.current = window.setTimeout(() => {
-        console.log("Updating note content");
-        updateMutation.mutate();
-      }, timeInterval);
-    }
-  }, [content]);
 
   const mkeditor = useQuery({
     queryKey: ["mkeditor"],
@@ -98,15 +76,20 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
   }
 
   return (
-    <div className="h-full w-full dark:bg-[#232329] bg-[#e5e7eb] bg-opacity-25 dark:bg-opacity-50">
-      <mkeditor.data.MKEditor
-        content={content}
-        setContent={setContent}
-        loading={updateMutation.isLoading}
-        onSave={async () => updateMutation.mutate()}
-        delLoading={deleteMutation.isLoading}
-        onDelete={async () => deleteMutation.mutate()}
-      />
+    <div className="h-full w-[40vw] dark:bg-[#232329] bg-[#e5e7eb] bg-opacity-25 dark:bg-opacity-50">
+      <div className={`${hideContent ? "hidden" : "block"}`}>
+        <mkeditor.data.MKEditor
+          content={content}
+          setContent={setContent}
+          loading={updateMutation.isLoading}
+          onSave={async () => updateMutation.mutate()}
+          delLoading={deleteMutation.isLoading}
+          onDelete={async () => deleteMutation.mutate()}
+        />
+      </div>
+      <div className={`${hideContent ? "block" : "hidden"} dark:text-white`}>
+        Content is being hiden for now...
+      </div>
     </div>
   );
 };

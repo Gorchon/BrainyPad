@@ -1,6 +1,6 @@
 ---
 import Page from "../../layouts/Page.astro";
-import NoteEditor from "../../components/react/note-editor";
+import NotePage from "../../components/react/note-page";
 import db from "../../server/db/db";
 import { eq } from "drizzle-orm";
 import { notes } from "../../server/db/schema";
@@ -10,11 +10,13 @@ const id = paramsId!;
 
 const note = await db.select().from(notes).where(eq(notes.id, id));
 const title = note[0].title;
-
 ---
+
 <Page title={`${title}`}>
   <div class="dark:text-white text-2xl font-semibold tracking-wide mb-2">
     {title}
   </div>
-  <NoteEditor client:load id={id} />
+  <div style="display: flex; justify-content: space-evenly; width: 80vw;">
+    <NotePage id={id} client:load />
+  </div>
 </Page>

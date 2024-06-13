@@ -71,6 +71,7 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
         updatedAt: new Date(),
         createdAt: new Date(),
         noteId: null,
+        default: false,
       };
 
       // create the conversation
@@ -93,6 +94,7 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
         updatedAt: new Date(),
         createdAt: new Date(),
         noteId: note.id,
+        default: false,
       };
 
       // create the conversation
@@ -100,8 +102,8 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
     }
   }
 
-  // This just tells ts that this will be defined
-  conversation = conversation!;
+  if (!conversation)
+    return new Response("Conversation not found", { status: 404 });
 
   // now, we need to find all the messages in this conversation
   const convMessages = await db.query.messages.findMany({
@@ -110,7 +112,7 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
   });
 
   if (!message) {
-    return new Response(JSON.stringify({ messages: convMessages }, null, 2), {
+    return new Response(JSON.stringify({ messages: convMessages }), {
       headers: { "content-type": "application/json" },
       status: 200,
     });
@@ -121,6 +123,67 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
       limit: 10,
       query: message,
       fileId: id,
+    });
+
+    if (!context.success)
+      return new Response("Failed to get context", { status: 500 });
+
+    const contextMsg = context.data.items
+      .map((chunk) => `chunk_id: ${chunk.chunkId}\nchunk_text: ${chunk.text}`)
+      .join("---\n\n");
+
+    const aiResponse = await makeAIResponse(
+      contextMsg,
+      message,
+      convMessages.map((msg) => ({
+        content: msg.content,
+        role: msg.wasFromAi ? "assistant" : "user",
+      }))
+    );
+
+    const newMessages = await db
+      .insert(messages)
+      .values([
+        {
+          id: crypto.randomUUID(),
+          content: message,
+          wasFromAi: false,
+          conversationId: conversation.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: crypto.randomUUID(),
+          content: aiResponse,
+          wasFromAi: true,
+          conversationId: conversation.id,
+          createdAt: new Date(new Date().getTime() + 100), // Add 100 ms delay
+          updatedAt: new Date(new Date().getTime() + 100), // Add 100 ms delay
+        },
+      ])
+      .returning();
+
+    const updatedMessages = [...convMessages, ...newMessages];
+
+    return new Response(
+      JSON.stringify({ messages: updatedMessages }, null, 2),
+      {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      }
+    );
+  } else if (idType === "note") {
+    const note = await db.query.notes.findFirst({
+      where: eq(notes.id, id),
+    });
+
+    if (!note || !note.nearbyy_id)
+      return new Response("Note not found", { status: 404 });
+
+    const context = await nearbyy.semanticSearch({
+      limit: 10,
+      query: message,
+      fileId: note.nearbyy_id,
     });
 
     if (!context.success)

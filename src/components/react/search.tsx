@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactQueryProvider from "./react-query-provider";
-import { useMutation } from "react-query";
-import type { FileSelect } from "../../server/db/types";
+import { useMutation, useQuery } from "react-query";
+import type { FileSelect, NoteSelect } from "../../server/db/types";
 
 interface SearchProps {
   children?: React.ReactNode;
@@ -17,7 +17,9 @@ const Search: React.FC<SearchProps> = (props) => {
 
 const InnerSearch: React.FC<SearchProps> = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filePreview, setFilePreview] = useState<FileSelect | null>(null);
+  const [filePreview, setFilePreview] = useState<
+    FileSelect | NoteSelect | null
+  >(null);
 
   const searchMutation = useMutation({
     mutationKey: ["search", searchTerm],
@@ -34,7 +36,7 @@ const InnerSearch: React.FC<SearchProps> = () => {
             chunkid: string;
             text: string;
             distance: number;
-            file: FileSelect;
+            file: FileSelect | NoteSelect;
           }
         >;
       };
@@ -44,6 +46,14 @@ const InnerSearch: React.FC<SearchProps> = () => {
     onSuccess: ({ aiOverview, topMatches }) => {
       const { file } = topMatches[aiOverview.fileId];
       setFilePreview(file);
+    },
+  });
+
+  const mkeditor = useQuery({
+    queryKey: ["mkeditor"],
+    queryFn: async () => {
+      const MKEditor = (await import("./MKEditor")).default;
+      return { MKEditor };
     },
   });
 
@@ -67,18 +77,18 @@ const InnerSearch: React.FC<SearchProps> = () => {
         </div>
 
         {searchMutation.data && (
-          <div className="relative outline outline-gray-400 bg-gray-200 p-4 rounded-sm">
-            <p className="pr-24 text-gray-800">
+          <div className="relative outline outline-gray-400 bg-gray-200 p-4 rounded-sm dark:bg-card dark:outline-borders">
+            <p className="pr-24 text-gray-800 dark:text-white">
               {searchMutation.data?.aiOverview.response}
             </p>{" "}
-            <div className="absolute top-4 text-gray-900 right-4 font-semibold">
+            <div className="absolute top-4 text-gray-900 right-4 font-semibold dark:text-white">
               AI Answer
             </div>
           </div>
         )}
 
         {searchMutation.isLoading && (
-          <div className="relative outline outline-gray-400 bg-gray-200 p-4 rounded-sm">
+          <div className="relative outline outline-gray-400 bg-gray-200 p-4 rounded-sm dark:bg-card dark:outline-borders">
             <div className="flex flex-col space-y-2">
               <div className="w-[70%] h-6 rounded-md bg-gray-300 animate-pulse"></div>
               <div className="w-[80%] h-6 rounded-md bg-gray-300 animate-pulse"></div>
@@ -90,33 +100,66 @@ const InnerSearch: React.FC<SearchProps> = () => {
           </div>
         )}
 
-        <h2 className="text-2xl font-semibold dark:text-white">Results: </h2>
+        <h2 className="text-2xl font-semibold dark:text-white ">Results: </h2>
 
         {Object.keys(searchMutation.data?.topMatches ?? {}).map((fileId) => {
           const { file, text } = searchMutation.data?.topMatches[fileId]!;
 
+          console.log(searchMutation.data);
+          console.log(searchMutation.data?.topMatches[fileId]!);
+
           const summary = text.slice(0, 200) + "...";
-          const nameWithoutExtension = file.name?.split(".")[0];
+
+          let nameWithoutExtension = "";
+          let path = "";
+
+          if ("title" in file) {
+            nameWithoutExtension = file.title ?? "Missing Note Title";
+            path = "/notes";
+          } else {
+            nameWithoutExtension =
+              file.name?.split(".")[0] ?? "Missing File Name";
+            path = "/files";
+          }
 
           return (
-            <a href={`/files/${file.id}`}>
-              <h3 className="text-xl">{nameWithoutExtension}</h3>
-              <p>{summary}</p>
+            <a key={file.id} href={`${path}/${file.id}`}>
+              <h3 className="text-xl dark:text-white">{nameWithoutExtension}</h3>
+              <p className="dark:text-white">{summary}</p>
             </a>
           );
         })}
       </div>
 
       <div className="w-full sticky top-0 ">
-        {searchMutation.data && (
+        {searchMutation.data && filePreview && "media" in filePreview && (
           <iframe
             src={filePreview?.media ?? ""}
             className="w-full min-h-[80vh]"
           />
         )}
+        {searchMutation.data &&
+          filePreview &&
+          "content" in filePreview &&
+          mkeditor.data &&
+          !mkeditor.isLoading && (
+            <div>
+              <h2 className="dark:text-white text-2xl font-semibold tracking-wide mb-2">
+                {filePreview.title ?? "Missing Title"}
+              </h2>
+              <mkeditor.data.MKEditor
+                delLoading={false}
+                loading={false}
+                onDelete={() => void 0}
+                onSave={() => void 0}
+                setContent={() => void 0}
+                content={filePreview.content ?? ""}
+              />
+            </div>
+          )}
 
         {searchMutation.isLoading && (
-          <div className="w-full min-h-[80vh] rounded-md bg-gray-500 animate-pulse"></div>
+          <div className="w-full min-h-[80vh] rounded-md bg-gray-500 dark:bg-sidebar animate-pulse"></div>
         )}
       </div>
     </div>

@@ -1,7 +1,7 @@
 ---
 import Page from "../../layouts/Page.astro";
-import FilePreview from "../../components/react/file-preview";
-import Chat from "../../components/react/chat";
+
+import FilePage from "../../components/react/file-page";
 
 const { id: paramsId } = Astro.params;
 const id = paramsId!;
@@ -9,7 +9,6 @@ const id = paramsId!;
 
 <Page title={`Note ${id}`}>
   <div style="display: flex; justify-content: space-evenly; width: 80vw;">
-    <FilePreview client:load id={id} />
-    <Chat type="file" id={id} client:load />
+    <FilePage client:load id={id} />
   </div>
 </Page>
