@@ -2,6 +2,18 @@ import type { APIRoute } from "astro";
 import { NearbyyClient } from "@nearbyy/core";
 import db from "../../../server/db/db";
 import { files } from "../../../server/db/schema";
+import type { Placeholder, SQL } from "drizzle-orm";
+
+type FileRecord = {
+  id: string | SQL<unknown> | Placeholder<string, any>;
+  nearbyy_id: string | SQL<unknown> | Placeholder<string, any>; // Add this line
+  name?: string | SQL<unknown> | Placeholder<string, any> | null;
+  type?: string | SQL<unknown> | Placeholder<string, any> | null;
+  media?: string | SQL<unknown> | Placeholder<string, any> | null;
+  createdAt?: Date | SQL<unknown> | Placeholder<string, any> | null;
+  updatedAt?: Date | SQL<unknown> | Placeholder<string, any> | null;
+  userId?: string | SQL<unknown> | Placeholder<string, any> | null;
+};
 
 const nearbyy_key = import.meta.env.NEARBYY_API_KEY;
 
@@ -44,7 +56,7 @@ export const POST: APIRoute = async ({ locals, request }) => {
       createdAt: new Date(),
       media: file.url,
       type: fileValue.type,
-    });
+    } as FileRecord);
   });
 
   await Promise.all(promises);
