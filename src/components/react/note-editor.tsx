@@ -53,8 +53,8 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
     },
     onSuccess: () => {
       window.location.href = "/";
-    }
-  })
+    },
+  });
 
   //Set the note content when the note is loaded
   useEffect(() => {
@@ -98,7 +98,7 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
   }
 
   return (
-    <div className="h-full w-full dark:bg-[#232329] bg-[#e5e7eb] bg-opacity-25 dark:bg-opacity-50">
+    <div className="h-full w-[40vw] dark:bg-[#232329] bg-[#e5e7eb] bg-opacity-25 dark:bg-opacity-50">
       <mkeditor.data.MKEditor
         content={content}
         setContent={setContent}

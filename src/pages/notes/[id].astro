@@ -4,17 +4,21 @@ import NoteEditor from "../../components/react/note-editor";
 import db from "../../server/db/db";
 import { eq } from "drizzle-orm";
 import { notes } from "../../server/db/schema";
+import Chat from "../../components/react/chat";
 
 const { id: paramsId } = Astro.params;
 const id = paramsId!;
 
 const note = await db.select().from(notes).where(eq(notes.id, id));
 const title = note[0].title;
-
 ---
+
 <Page title={`${title}`}>
   <div class="dark:text-white text-2xl font-semibold tracking-wide mb-2">
     {title}
   </div>
-  <NoteEditor client:load id={id} />
+  <div style="display: flex; justify-content: space-evenly; width: 80vw;">
+    <NoteEditor client:load id={id} />
+    <Chat type="note" id={id} client:load />
+  </div>
 </Page>
