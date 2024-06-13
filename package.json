@@ -11,7 +11,8 @@
     "migrate": "tsx src/server/db/migrate.ts",
     "studio": "drizzle-kit studio",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
@@ -51,8 +52,10 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.8",
+    "cypress": "^13.11.0",
     "drizzle-kit": "^0.22.1",
     "tsx": "^4.9.0",
     "vercel": "^34.1.7"
-  }
+  },
+  "packageManager": "pnpm@9.3.0+sha512.ee7b93e0c2bd11409c6424f92b866f31d3ea1bef5fbe47d3c7500cdc3c9668833d2e55681ad66df5b640c61fa9dc25d546efa54d76d7f8bf54b13614ac293631"
 }
