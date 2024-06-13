@@ -46,15 +46,14 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
 
   const deleteMutation = useMutation({
     mutationFn: () => {
-      return fetch(`/api/notes/delete`, {
+      return fetch(`/api/notes/${id}`, {
         method: "DELETE",
-        body: JSON.stringify({ id } as { id: string }),
       });
     },
     onSuccess: () => {
       window.location.href = "/";
-    }
-  })
+    },
+  });
 
   //Set the note content when the note is loaded
   useEffect(() => {
@@ -63,27 +62,6 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
       setContent(note.data?.content ?? "");
     }
   }, [note.isSuccess]);
-
-  /**
-   * Creates a timer to update the note content x seconds after every change
-   * If any changes are made during those x seconds, the timer is reset
-   */
-  useEffect(() => {
-    const timeInterval = 10 * 1000;
-    // Call the mutation when content changes
-    if (content && content != note.data?.content) {
-      // Clear the previous timer
-      if (timeoutId.current) {
-        window.clearTimeout(timeoutId.current);
-      }
-
-      // Set up a new timer
-      timeoutId.current = window.setTimeout(() => {
-        console.log("Updating note content");
-        updateMutation.mutate();
-      }, timeInterval);
-    }
-  }, [content]);
 
   const mkeditor = useQuery({
     queryKey: ["mkeditor"],
@@ -98,7 +76,7 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
   }
 
   return (
-    <div className="h-full w-full dark:bg-[#232329] bg-[#e5e7eb] bg-opacity-25 dark:bg-opacity-50">
+    <div className="h-full w-[40vw] dark:bg-[#232329] bg-[#e5e7eb] bg-opacity-25 dark:bg-opacity-50">
       <mkeditor.data.MKEditor
         content={content}
         setContent={setContent}

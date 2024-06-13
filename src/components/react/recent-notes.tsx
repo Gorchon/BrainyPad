@@ -84,9 +84,8 @@ const NotePreview = ({
 
   const deleteMutation = useMutation({
     mutationFn: () => {
-      return fetch(`/api/file/delete`, {
+      return fetch(`/api/file/${id}`, {
         method: "DELETE",
-        body: JSON.stringify({ id } as { id: string }),
       });
     },
     onSuccess: () => {
