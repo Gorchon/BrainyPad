@@ -26,20 +26,32 @@ function InnerRecentNotes() {
     return <div className="dark:text-white ">Loading...</div>;
 
   return data.map((file) => (
-    <FilePreview key={file.id} name={file.name ?? ""} id={file.id} refetch={refetch} />
+    <FilePreview
+      key={file.id}
+      name={file.name ?? ""}
+      id={file.id}
+      refetch={refetch}
+    />
   ));
 }
 
-function FilePreview({ name, id, refetch }: { name: string; id: string, refetch: () => void}) {
+function FilePreview({
+  name,
+  id,
+  refetch,
+}: {
+  name: string;
+  id: string;
+  refetch: () => void;
+}) {
   function navigateTo(href: string) {
     window.location.href = href;
   }
 
   const deleteMutation = useMutation({
     mutationFn: () => {
-      return fetch(`/api/files/delete`, {
+      return fetch(`/api/files/${id}`, {
         method: "DELETE",
-        body: JSON.stringify({ id } as { id: string }),
       });
     },
     onSuccess: () => {

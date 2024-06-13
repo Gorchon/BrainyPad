@@ -134,7 +134,7 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
   const updatedMessages = [...convMessages, ...newMessages];
 
   const maybeFileReferenced = await db.query.files.findFirst({
-    where: eq(files.nearbyy_id, fileId),
+    where: eq(files.id, fileId),
   });
 
   const maybeNoteReferenced = await db.query.notes.findFirst({

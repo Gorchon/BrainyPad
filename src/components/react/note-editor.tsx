@@ -46,9 +46,8 @@ const InnerNoteEditor = ({ id }: NoteEditorProps) => {
 
   const deleteMutation = useMutation({
     mutationFn: () => {
-      return fetch(`/api/notes/delete`, {
+      return fetch(`/api/notes/${id}`, {
         method: "DELETE",
-        body: JSON.stringify({ id } as { id: string }),
       });
     },
     onSuccess: () => {

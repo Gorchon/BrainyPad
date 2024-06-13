@@ -1,12 +1,7 @@
 import type { APIRoute } from "astro";
 import db from "../../../server/db/db";
 import { conversations, messages } from "../../../server/db/schema";
-import { z } from "astro/zod";
 import { eq } from "drizzle-orm";
-
-const newDeleteContentValidator = z.object({
-  id: z.string(),
-});
 
 export const DELETE: APIRoute = async ({ locals, request, params }) => {
   let errorResponse = null;
