@@ -39,8 +39,12 @@ export const notes = pgTable("notes", {
 export const conversations = pgTable("conversations", {
   id: varchar("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id),
-  fileId: varchar("file_id").references(() => files.id),
-  noteId: varchar("note_id").references(() => notes.id),
+  fileId: varchar("file_id").references(() => files.id, {
+    onDelete: "cascade",
+  }),
+  noteId: varchar("note_id").references(() => notes.id, {
+    onDelete: "cascade",
+  }),
   default: boolean("default").default(false),
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
@@ -52,7 +56,10 @@ export const messages = pgTable("messages", {
   wasFromAi: boolean("was_from_ai").notNull(),
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
-  conversationId: varchar("conversation_id").references(() => conversations.id),
+  conversationId: varchar("conversation_id").references(
+    () => conversations.id,
+    { onDelete: "cascade" }
+  ),
 });
 
 export const attachments = pgTable("attachments", {
