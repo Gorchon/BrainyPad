@@ -114,7 +114,7 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
   );
 };
 
-async function makeAIResponse(query: string, context: string) {
+export async function makeAIResponse(query: string, context: string) {
   const prompt = `You are a search engine that helps users answer
   the questions they have using information in the database. You
   will be given a question and provide a very brief, and concise 

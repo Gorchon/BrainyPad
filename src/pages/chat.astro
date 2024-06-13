@@ -4,15 +4,14 @@ import ChatComponent from "../components/react/chat";
 ---
 
 <Page title="Chat">
-  <div>
     <div
-      class="flex items-center py-6 bg-[#e3e8ed] dark:bg-card dark:text-white rounded-lg pl-10 mb-7"
+      class="flex items-center py-6 bg-[#e3e8ed] dark:bg-card dark:text-white rounded-lg pl-10 mb-7 overflow-y-hidden"
     >
       <!-- perfil brainypad-->
       <img
-        src="/iconBrainy.webp"
-        alt="Icono de Brainy AI"
-        class="w-14 h-14 rounded-full mr-4"
+        src="/brainypad.svg"
+        alt="brainypad icon"
+        class="w-14 h-14 rounded-full mr-4 object-cover"
       />
       <h1 class="text-xl font-bold">Brainy AI</h1>
     </div>
@@ -20,5 +19,4 @@ import ChatComponent from "../components/react/chat";
       <!-- Ajustado para separar los contenidos -->
       <ChatComponent client:load />
     </div>
-  </div>
 </Page>

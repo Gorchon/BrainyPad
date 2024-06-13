@@ -12,7 +12,8 @@
     "studio": "drizzle-kit studio",
     "preview": "astro preview",
     "astro": "astro",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
