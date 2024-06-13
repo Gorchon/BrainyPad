@@ -60,7 +60,7 @@ const CreateNoteButton = () => {
   return (
     <button
       disabled={isLoading}
-      className="h-72 my-2 bg-white dark:bg-card outline outline-4 outline-gray-200 dark:outline-borders flex flex-col justify-center space-x-3 items-center text-lg dark:text-white hover:scale-[1.015] transition-all ease-out duration-200"
+      className="h-72 my-2 bg-white dark:bg-card outline outline-4 rounded-md outline-gray-200 dark:outline-borders flex flex-col justify-center space-x-3 items-center text-lg dark:text-white hover:scale-[1.015] transition-all ease-out duration-200"
       onClick={() => mutate()}
     >
       <CirclePlus size={30} className="dark:stroke-white" />
@@ -104,12 +104,12 @@ const NotePreview = ({
           event.preventDefault();
         }
       }}
-      className="h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-end hover:scale-[1.015] z-0 transition-all ease-out duration-20 my-2"
+      className="h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col justify-end hover:scale-[1.015] z-0 transition-all ease-out duration-20 my-2 rounded-md"
     >
       <div className="p-4">
         <p className="text-lg text-gray-500">{contentExcerpt}...</p>
       </div>
-      <div className="bg-gray-400 dark:bg-card-footer h-16 w-full flex items-center justify-start px-2 text-xl font-medium outline z-20 outline-3 outline-gray-600 dark:outline-borders">
+      <div className="bg-gray-400 dark:bg-card-footer h-16 w-full flex items-center justify-start px-2 text-xl font-medium outline z-20 outline-3 outline-gray-600 dark:outline-borders rounded-b-md">
         <span className="flex w-full justify-between items-center">
           <p className="dark:text-white">{title}</p>
           {deleteMutation.isLoading ? (
