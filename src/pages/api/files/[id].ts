@@ -21,7 +21,6 @@ export const GET: APIRoute = async ({ locals, request, params }) => {
 };
 
 import { conversations, messages } from "../../../server/db/schema";
-import { z } from "astro/zod";
 import { NearbyyClient } from "@nearbyy/core";
 
 const nearbyy_key = import.meta.env.NEARBYY_API_KEY;
@@ -39,29 +38,13 @@ export const DELETE: APIRoute = async ({ locals, request, params }) => {
 
     const id = params.id!;
 
-    const file = await db.select().from(files).where(eq(files.id, id));
-
-    let nearbyyId;
-    if (file && file.length) {
-      nearbyyId = file[0].nearbyy_id;
-    } else {
-      return new Response("Note not found in databse", { status: 404 });
-    }
-
-    // Check if note exists in nearbyy, if so, delete it
-    if (nearbyyId && nearbyyId !== "") {
-      try {
-        const deleteRes = await nearbyy.deleteFiles({ ids: [nearbyyId] });
-        if (!deleteRes.success) {
-          errorResponse = {
-            success: false,
-            message: "Failed to delete file",
-            error: deleteRes,
-          };
-        }
-      } catch (error) {
-        console.error("Error deleting file:", error);
-      }
+    const deleteRes = await nearbyy.deleteFiles({ ids: [id] });
+    if (!deleteRes.success) {
+      errorResponse = {
+        success: false,
+        message: "Failed to delete file from Nearbyy",
+        error: deleteRes,
+      };
     }
 
     let conversationIds = await db
