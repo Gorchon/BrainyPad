@@ -111,16 +111,19 @@ const InnerSearch: React.FC<SearchProps> = () => {
           const summary = text.slice(0, 200) + "...";
 
           let nameWithoutExtension = "";
+          let path = "";
 
           if ("title" in file) {
             nameWithoutExtension = file.title ?? "Missing Note Title";
+            path = "/notes";
           } else {
             nameWithoutExtension =
               file.name?.split(".")[0] ?? "Missing File Name";
+            path = "/files";
           }
 
           return (
-            <a key={file.id} href={`/files/${file.id}`}>
+            <a key={file.id} href={`${path}/${file.id}`}>
               <h3 className="text-xl">{nameWithoutExtension}</h3>
               <p>{summary}</p>
             </a>
