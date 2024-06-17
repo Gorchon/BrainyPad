@@ -58,7 +58,7 @@ const InnerSearch: React.FC<SearchProps> = () => {
   });
 
   return (
-    <div className="grid grid-cols-2 gap-x-4 h-full">
+    <div className="grid grid-cols-2 gap-x-4">
       <div className="flex flex-col space-y-6">
         <div className="w-full flex space-x-2 justify-between">
           <input
@@ -131,7 +131,7 @@ const InnerSearch: React.FC<SearchProps> = () => {
         })}
       </div>
 
-      <div className="w-full sticky top-0">
+      <div className="w-full sticky top-0 ">
         {searchMutation.data && filePreview && "media" in filePreview && (
           <iframe
             src={filePreview?.media ?? ""}
@@ -159,7 +159,7 @@ const InnerSearch: React.FC<SearchProps> = () => {
           )}
 
         {searchMutation.isLoading && (
-          <div className="w-full min-h-[90vh] rounded-md bg-gray-500 animate-pulse"></div>
+          <div className="w-full min-h-[80vh] rounded-md bg-gray-500 animate-pulse"></div>
         )}
       </div>
     </div>

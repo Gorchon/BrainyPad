@@ -61,7 +61,7 @@ function FilePreview({
 
   return (
     <div
-      className="h-72 bg-white cursor-pointer hover:scale-[1.015] my-2 transition-all ease-out duration-200 rounded-md"
+      className="h-72 bg-white cursor-pointer hover:scale-[1.015] my-2 transition-all ease-out duration-200"
       onClick={() => navigateTo(`/files/${id}`)}
     >
       <div className="relative h-72 outline outline-4 bg-white dark:bg-card outline-gray-200 dark:outline-borders flex flex-col">
@@ -164,7 +164,7 @@ function UploadFileButton() {
 
   return (
     <div
-      className="h-72 my-2 bg-white dark:bg-card outline outline-4 outline-gray-200 dark:outline-borders rounded-md flex flex-col justify-center items-center text-lg hover:scale-[1.015] transition-all ease-out duration-200"
+      className="h-72 my-2 bg-white dark:bg-card outline outline-4 outline-gray-200 dark:outline-borders flex flex-col justify-center items-center text-lg hover:scale-[1.015] transition-all ease-out duration-200"
       onDragOver={onDragOver}
       onDragLeave={onDragleave}
       onDrop={onDragDrop}
